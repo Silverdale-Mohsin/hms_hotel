@@ -1,0 +1,122 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_payment_tree">
+            <field name="name">hotel.payment.tree</field>
+            <field name="model">hotel.payment</field>
+            <field name="arch" type="xml">
+                <tree export_xlsx="0" class="text-center" sample="1" decoration-warning="state == 'draft'" decoration-success="state == 'successful'" decoration-bf="state == 'successful'">
+                    <field name="receipt_number"/>
+                    <field name="hotel_id"/>
+                    <field name="guest_id"/>
+                    <field name="reservation_id"/>
+                    <field name="amount" widget="monetary" sum="Total"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="payment_method"/>
+                    <field name="payment_date"/>
+                    <field name="is_successful"/>
+                    <field name="card_id" optional="hide"/>
+                    <field name="card_number" optional="hide"/>
+                    <field name="card_expiry" optional="hide"/>
+                    <field name="state" widget="badge" decoration-warning="state == 'draft'" decoration-success="state == 'successful'" optional="show"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_payment_search">
+            <field name="name">hotel.payment.search</field>
+            <field name="model">hotel.payment</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="hotel_id"/>
+                    <field name="guest_id"/>
+                    <field name="reservation_id"/>
+                    <filter string="Cash" name="payment_type_cash" domain="[('payment_method', '=', 'cash')]"/>
+                    <filter string="Credit Card" name="payment_type_credit_card" domain="[('payment_method', '=', 'credit_card')]"/>
+                    <filter string="Payment Successful" name="payment_is_successful" domain="[('is_successful', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Hotel" name="group_by_hotel_id" context="{'group_by':'hotel_id'}"/>
+                        <filter string="Guest" name="group_by_guest_id" context="{'group_by':'guest_id'}"/>
+                        <filter string="Payment Method" name="group_by_payment_method" context="{'group_by':'payment_method'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="hotel_id" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="guest_id" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="payment_method" icon="fa-usd" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_payment_form">
+            <field name="name">hotel.payment.form</field>
+            <field name="model">hotel.payment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_payment_successful" icon="fa-usd" string="Payment Successful" class="oe_highlight" type="object" states="draft"/>
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,successful"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" class="oe_stat_button" icon="fa-credit-card-alt" name="action_view_cards">
+                                <field string="Card" name="card_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div>
+                            <h1><field name="receipt_number" readonly="1"/></h1>
+                        </div>
+                        <group string="Hotel Information" name="hotel_info">
+                            <group>
+                                <field name="hotel_id" widget="selection" domain="[('is_hotel','=',True)]"/>
+                            </group>
+                            <group>
+                                <field name="is_successful" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Payment Information" name="payment_info">
+                            <group>
+                                <field name="guest_id" widget="selection"/>
+                                <field name="payment_method" widget="radio"/>
+                                <field name="amount" widget="monetary"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="reservation_id" domain="[('guest_id', '=', guest_id),('state', '=', 'pending')]" widget="selection"/>
+                                <field name="payment_date"/>
+                            </group>
+                        </group>
+                        <group string="Card Information" name="card_info" attrs="{'invisible': [('payment_method','!=','credit_card')]}">
+                            <group>
+                                <field name="card_id" domain="[('guest_id', '=', guest_id)]" widget="selection"/>
+                                <field name="card_expiry"/>
+                            </group>
+                            <group>
+                                <field name="card_number" attrs="{'readonly': [('card_id','=',False)]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <!--Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_payment">
+            <field name="name">PAYMENTs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.payment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Payment!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Payments" sequence="0" id="menu_hotel_payment" parent="menu_hotel_payment_master" action="action_hotel_payment"/>
+    </data>
+</odoo>

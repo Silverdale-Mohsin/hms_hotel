@@ -1,0 +1,186 @@
+<odoo>
+    <data>
+        <!-- CALENDER VIEW -->
+        <record model="ir.ui.view" id="view_hotel_reservation_calendar">
+            <field name="name">hotel.reservation.calendar</field>
+            <field name="model">hotel.reservation</field>
+            <field name="arch" type="xml">
+                <calendar string="Reservations" date_start="check_in_date" date_stop="check_out_date" mode="month" date_delay="duration" color="guest_id" quick_add="False" hide_time="True" form_view_id="%(hms_hotel.view_hotel_reservation_form)d" event_open_popup="True" event_limit="5">
+                    <field name="guest_id" filters="1" avatar_field="image"/>
+                    <field name="state" invisible="1" filters="1"/>
+                </calendar>
+            </field>
+        </record>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_reservation_tree">
+            <field name="name">hotel.reservation.tree</field>
+            <field name="model">hotel.reservation</field>
+            <field name="arch" type="xml">
+                <tree multi_edit="1" class="text-center" export_xlsx="0" sample="1" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-bf="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'">
+                    <field name="reservation_ref"/>
+                    <field name="hotel"/>
+                    <field name="guest_id"/>
+                    <field name="guest_ref" optional="hide"/>
+                    <field name="room_id"/>
+                    <field name="room_type" optional="hide"/>
+                    <field name="room_view_type" optional="hide"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="price_per_day" optional="hide" widget="monetary"/>
+                    <field name="service_ids" optional="hide"/>
+                    <field name="service_total_price" widget="monetary" optional="hide"/>
+                    <field name="facility_ids" optional="hide"/>
+                    <field name="facility_total_price" widget="monetary" optional="hide"/>
+                    <field name="duration" optional="show"/>
+                    <field name="gender" optional="hide"/>
+                    <field name="email" optional="show"/>
+                    <field name="phone_no" optional="show"/>
+                    <field name="reservation_date" optional="show"/>
+                    <field name="check_in_date" optional="show"/>
+                    <field name="check_out_date" optional="show"/>
+                    <field name="activity_ids" widget="list_activity" optional="hide"/>
+                    <field name="progress" widget="progressbar" optional="hide"/>
+                    <field name="receipt_number" optional="show"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'" optional="show"/>
+                    <field name="price_subtotal" optional="show"/>
+                    <field name="special_requests" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_reservation_search">
+            <field name="name">hotel.reservation.search</field>
+            <field name="model">hotel.reservation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="reservation_ref"/>
+                    <field name="guest_id" filter_domain="['|',('guest_id','ilike',self),('guest_ref','ilike',self)]"/>
+                    <field name="guest_ref"/>
+                    <field name="state"/>
+                    <field name="phone_no"/>
+                    <filter name="filter_draft" string="Draft" domain="[('state','=','draft')]"/>
+                    <filter name="filter_pending" string="Pending" domain="[('state','=','pending')]"/>
+                    <filter name="filter_confirm" string="Confirm" domain="[('state','=','confirm')]"/>
+                    <filter name="filter_cancel" string="Cancel" domain="[('state','=','cancel')]"/>
+                    <filter name="filter_expire" string="Expire" domain="[('state','=','expire')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Guest" name="group_by_type" context="{'group_by':'guest_id'}"/>
+                        <filter string="State" name="group_by_type" context="{'group_by':'state'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="guest_id" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="room_type" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="room_view_type" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="state" icon="fa-star-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_reservation_form">
+            <field name="name">hotel.reservation.form</field>
+            <field name="model">hotel.reservation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_send_mail" string="Send Mail" class="oe_highlight" type="object" icon="fa-envelope-o" states="pending"/>
+                        <button name="action_share_whatsapp" string="Share in Whatsapp" class="oe_highlight" type="object" icon="fa-whatsapp"/>
+                        <button name="action_draft" string="Reset to Draft" class="oe_highlight" type="object" states="cancel"/>
+                        <button name="action_pending" string="Payment Pending" class="oe_highlight" type="object" states="draft"/>
+<!--                        <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" states="pending"/>-->
+                        <!-- OBJECT TYPE -->
+                        <!--<button name="action_cancel" string="Cancel" type="object" states="draft,pending"/>-->
+                        <!-- ACTION TYPE -->
+                        <button name="%(hms_hotel.action_hotel_cancel_reservation)d" string="Cancel" type="action" context="{'default_reason':'For Testing Purpose', 'hide_reservation':1, 'hide_guest':1}" states="draft,pending"/>
+                        <!--<button name="action_expire" string="Expire" class="oe_highlight" type="object"/>-->
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,pending,confirm,cancel,expire"/>
+                    </header>
+                    <sheet>
+                        <div style="display: flex; justify-content: space-between;">
+                            <h1><field name="reservation_ref" readonly="1"/></h1>
+                            <div class="oe_title">
+                                <field name="progress" widget="percentpie"/>
+                            </div>
+                        </div>
+                        <div>
+                            <field name="tag_ids" widget="many2many_tags" placeholder="Tags" options="{'no_create': True,'color_field': 'color'}" domain="[('type', '=', 'tag_reservation')]"/>
+                        </div>
+                        <group string="Guest Information" name="guest_info">
+                            <group>
+                                <field name="guest_id" default_focus="1" widget="selection"/>
+                                <field name="gender"/>
+                                <field name="email" widget="email"/>
+                                <field name="guest_nationality"/>
+                            </group>
+                            <group>
+                                <field name="guest_ref" readonly="1" force_save="1"/>
+                                <field name="cnic_no" attrs="{'invisible': [('guest_nationality','!=','pakistan')]}"/>
+                                <field name="passport_no" attrs="{'invisible': [('guest_nationality','=','pakistan')]}"/>
+                                <field name="phone_no" widget="phone"/>
+                            </group>
+                        </group>
+                        <group string="Room Information" name="room_info" attrs="{'invisible': [('state','=','draft')]}">
+                            <group>
+                                <field name="room_type" attrs="{'readonly': [('state','in', ['confirm', 'cancel', 'expire'])], 'required': [('state','=','pending')]}"/>
+                                <field name="room_id" widget="selection" domain="[('is_available', '=', True),('type', '=', room_type),('view_type', '=', room_view_type)]" attrs="{'readonly': [('state','in', ['confirm', 'cancel', 'expire'])], 'required': [('state','=','pending')]}"/>
+                                <field name="capacity"/>
+                            </group>
+                            <group>
+                                <field name="room_view_type" attrs="{'readonly': [('state','in', ['confirm', 'cancel', 'expire'])], 'required': [('state','=','pending')]}"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="price_per_day" readonly="1" widget="monetary" attrs="{'readonly': [('state','in', ['confirm', 'cancel', 'expire'])], 'required': [('state','=','pending')]}"/>
+                            </group>
+                        </group>
+                        <group string="Service Information" name="service_info" attrs="{'invisible': [('state','=','draft')]}">
+                            <group>
+                                <field name="service_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="service_total_price" widget="monetary"/>
+                            </group>
+                        </group>
+                        <group string="Facility Information" name="facility_info" attrs="{'invisible': [('state','=','draft')]}">
+                            <group>
+                                <field name="facility_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="facility_total_price" widget="monetary"/>
+                            </group>
+                        </group>
+                        <group string="Other Information" name="other_info">
+                            <group>
+                                <field name="hotel"/>
+                                <field name="check_in_date"/>
+                                <field name="duration"/>
+                            </group>
+                            <group>
+                                <field name="reservation_date"/>
+                                <field name="check_out_date"/>
+                                <field name="special_requests"/>
+                                <field name="requests" attrs="{'invisible': [('special_requests','=',False)], 'required': [('special_requests','=',True)]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <!--Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_reservation">
+            <field name="name">RESERVATIONs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.reservation</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Reservation!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Reservations" sequence="0" id="menu_hotel_reservation" parent="menu_reservation_detail_master" action="action_hotel_reservation"/>
+    </data>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- GUEST -->
+    <record model="ir.sequence" id="seq_hotel_guest">
+        <field name="name">Hotel Guest</field>
+        <field name="code">hotel.guest</field>
+        <field name="prefix">HM</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <!-- RESERVATION -->
+    <record model="ir.sequence" id="seq_hotel_reservation">
+        <field name="name">Hotel Reservation</field>
+        <field name="code">hotel.reservation</field>
+        <field name="prefix">HR</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <!-- BOOKING -->
+    <record model="ir.sequence" id="seq_hotel_booking">
+        <field name="name">Hotel Booking</field>
+        <field name="code">hotel.booking</field>
+        <field name="prefix">HB</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <!-- EMPLOYEE -->
+<!--    <record model="ir.sequence" id="seq_hotel_employee">-->
+<!--        <field name="name">Hotel Employee</field>-->
+<!--        <field name="code">hotel.employee</field>-->
+<!--        <field name="prefix">HE</field>-->
+<!--        <field name="padding">4</field>-->
+<!--        <field name="company_id" eval="False"/>-->
+<!--    </record>-->
+    <!-- PAYMENT -->
+<!--    <record model="ir.sequence" id="seq_hotel_payment">-->
+<!--        <field name="name">Hotel Payment</field>-->
+<!--        <field name="code">hotel.payment</field>-->
+<!--        <field name="prefix">REC</field>-->
+<!--        <field name="padding">4</field>-->
+<!--        <field name="company_id" eval="False"/>-->
+<!--    </record>-->
+</odoo>

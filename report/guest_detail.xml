@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!--    <template id="report_guest_detail_layout">-->
+<!--        <t t-if="not o" t-set="o" t-value="doc"/>-->
+<!--        <t t-if="not company">-->
+<!--            <t t-if="company_id"><t t-set="company" t-value="company_id"/></t>-->
+<!--            <t t-elif="o and 'company_id' in o and o.company_id.sudo()"><t t-set="company" t-value="o.company_id.sudo()"/></t>-->
+<!--            <t t-else="else"><t t-set="company" t-value="res_company"/></t>-->
+<!--        </t>-->
+<!--        <div class="header">-->
+<!--            <div class="text-center" style="border-bottom: 1px solid black;">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-3 mb4"><img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="img" style="max-height:90px;"/></div>-->
+<!--                    <div class="col-4"><p t-out="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M')"/></div>-->
+<!--                    <div class="col-5 text-right"><span t-if="company.company_details" t-field="company.company_details"/></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="article o_report_layout_standard"><t t-out="0"/></div>-->
+<!--        <div class="footer o_standard_footer">-->
+<!--            <div class="text-center" style="border-top: 1px solid black;">-->
+<!--                <ul class="list-inline mb4"><span t-field="company.report_footer"/></ul>-->
+<!--                <br/>-->
+<!--                <p>Page<span class="page"/>/<span class="topage"/></p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </template>-->
+
+    <template id="report_guest_detail">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="col-12 text-center">
+                        <img t-if="o.image" t-att-src="image_data_uri(o.image)" alt="img" style="max-height:180px;"/>
+                        <h2 t-field="o.name" style="border-bottom: 2px solid black;"/>
+                    </div>
+                    <h3 class="mt-4"><span>Reference # </span><strong><span t-field="o.guest_ref"/></strong></h3>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-3 text-center"><strong>Gender</strong><p t-field="o.gender"/></div>
+                        <div class="col-3 text-center"><strong>Email</strong><p t-field="o.email"/></div>
+                        <div class="col-3 text-center"><strong>Phone</strong><p t-field="o.phone_no"/></div>
+                        <div class="col-3 text-center"><strong>Age</strong><p t-field="o.age"/></div>
+                    </div>
+                    <br/>
+                    <t t-if="o.card_ids">
+                        <h5 class="mt-4"><strong><span>Card Details:</span></strong></h5>
+                        <table class="table table-sm o_main_table" name="card">
+                            <thead>
+                                <tr>
+                                    <th name="th_type" class="text-center"><span>Type</span></th>
+                                    <th name="th_number" class="text-center"><span>Number</span></th>
+                                    <th name="th_expiry" class="text-center"><span>Expiry</span></th>
+                                </tr>
+                            </thead>
+                            <t t-set="card_count" t-value="0"/>
+                            <t t-foreach="o.card_ids" t-as="line">
+                                <t t-set="card_count" t-value="card_count + 1"/>
+                                <tr>
+                                    <td class="text-center"><span t-field="line.card_type"/></td>
+                                    <td class="text-center"><span t-field="line.card_number"/></td>
+                                    <td class="text-center"><span t-field="line.card_expiry"/></td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <tfoot>
+                                    <td colspan="3" class="text-center"><strong>Total Cards : </strong><t t-esc="card_count"/></td>
+                                </tfoot>
+                            </tr>
+                        </table>
+                    </t>
+                    <br/>
+                    <t t-if="o.reservation_ids">
+                        <h5 class="mt-4"><strong><span>Reservation Details:</span></strong></h5>
+                        <table class="table table-sm o_main_table" name="reservation">
+                            <thead>
+                                <tr>
+                                    <th name="th_name" class="text-center"><span>Reference</span></th>
+                                    <th name="th_room" class="text-center"><span>Room</span></th>
+                                    <th name="th_duration" class="text-center"><span>Duration</span></th>
+                                    <th name="th_res_date" class="text-center"><span>Reservation Date</span></th>
+                                    <th name="th_check_in_date" class="text-center"><span>Check In Date</span></th>
+                                    <th name="th_check_out_date" class="text-center"><span>Check Out Date</span></th>
+                                    <th name="th_state" class="text-center"><span>Status</span></th>
+                                    <th name="th_recipt_no" class="text-center"><span>Payment Recipt</span></th>
+                                </tr>
+                            </thead>
+                            <t t-set="reservation_count" t-value="0"/>
+                            <t t-foreach="o.reservation_ids" t-as="line">
+                                <t t-set="reservation_count" t-value="reservation_count + 1"/>
+                                <tr>
+                                    <td class="text-center"><span t-field="line.reservation_ref"/></td>
+                                    <td class="text-center"><span t-field="line.room_id"/></td>
+                                    <td class="text-center"><span t-field="line.duration"/></td>
+                                    <td class="text-center"><span t-field="line.reservation_date"/></td>
+                                    <td class="text-center"><span t-field="line.check_in_date"/></td>
+                                    <td class="text-center"><span t-field="line.check_out_date"/></td>
+                                    <td class="text-center"><span t-field="line.state"/></td>
+                                    <td class="text-center"><span t-field="line.receipt_number"/></td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <tfoot>
+                                    <td colspan="8" class="text-center"><strong>Total Reservations : </strong><t t-esc="reservation_count"/></td>
+                                </tfoot>
+                            </tr>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

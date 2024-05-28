@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_reservation_detail">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="col-12 text-center">
+                        <h2 t-field="o.reservation_ref" style="border-bottom: 2px solid black;"/>
+                    </div>
+                    <h3 class="mt-4"><span>Price(Subtotal) : </span><strong><span t-field="o.price_subtotal"/></strong></h3>
+                    <div t-if="o.room_id">
+                        <h5 class="mt-4"><strong><span>Room Details:</span></strong></h5>
+                        <table class="table table-sm o_main_table" name="room">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"><span>Room #</span></th>
+                                    <th class="text-center"><span>Type</span></th>
+                                    <th class="text-center"><span>View Type</span></th>
+                                    <th class="text-center"><span>Capacity</span></th>
+                                    <th class="text-center"><span>Price(Per Day)</span></th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td class="text-center"><span t-field="o.room_id"/></td>
+                                <td class="text-center"><span t-field="o.room_type"/></td>
+                                <td class="text-center"><span t-field="o.room_view_type"/></td>
+                                <td class="text-center"><span t-field="o.capacity"/></td>
+                                <td class="text-center"><span t-field="o.price_per_day"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div t-if="o.service_ids">
+                        <h5 class="mt-4"><strong><span>Service Details:</span></strong></h5>
+                        <table class="table table-sm o_main_table" name="room">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"><span>Services</span></th>
+                                    <th class="text-center"><span>Price(Service)</span></th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td class="text-center"><span t-field="o.service_ids"/></td>
+                                <td class="text-center"><span t-field="o.service_total_price"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div t-if="o.facility_ids">
+                        <h5 class="mt-4"><strong><span>Facility Details:</span></strong></h5>
+                        <table class="table table-sm o_main_table" name="room">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"><span>Facilities</span></th>
+                                    <th class="text-center"><span>Price(Reservation)</span></th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td class="text-center"><span t-field="o.facility_ids"/></td>
+                                <td class="text-center"><span t-field="o.facility_total_price"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <h5 class="mt-4"><strong><span>Other Details:</span></strong></h5>
+                    <table class="table table-sm o_main_table" name="room">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><span>Reservation Date</span></th>
+                                <th class="text-center"><span>Duration</span></th>
+                                <th class="text-center"><span>Check in Date</span></th>
+                                <th class="text-center"><span>Check out Date</span></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td class="text-center"><span t-field="o.reservation_date"/></td>
+                            <td class="text-center"><span t-field="o.duration"/></td>
+                            <td class="text-center"><span t-field="o.check_in_date"/></td>
+                            <td class="text-center"><span t-field="o.check_out_date"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

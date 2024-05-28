@@ -1,0 +1,136 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_room_tree">
+            <field name="name">hotel.room.tree</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <tree default_order="room_no asc" export_xlsx="0" sample="1" multi_edit="1" class="text-center" decoration-danger="is_available == False" decoration-bf="is_available == False" decoration-success="view_type == 'garden_view'" decoration-info="view_type == 'sea_view'" decoration-warning="view_type == 'city_view'">
+                    <field name="hotel_id" decoration-bf="1"/>
+                    <field name="room_no" decoration-bf="1"/>
+                    <field name="type"/>
+                    <field name="view_type"/>
+                    <field name="floor"/>
+                    <field name="capacity"/>
+                    <field name="same_room_reserve" decoration-bf="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="price_per_day" widget="monetary"/>
+                    <field name="is_available"/>
+                    <field name="is_smoking_allowed"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_room_search">
+            <field name="name">hotel.room.search</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="room_no" filter_domain="['|',('room_no','ilike',self),('floor','ilike',self)]"/>
+                    <field name="floor"/>
+                    <field name="type" filter_domain="['|',('type','ilike',self),('view_type','ilike',self)]"/>
+                    <field name="view_type"/>
+                    <filter string="Available" name="room_id_is_available" domain="[('is_available', '=', True)]"/>
+                    <filter string="Unavailable" name="room_id_is_unavailable" domain="[('is_available', '=', False)]"/>
+                    <separator/>
+                    <filter string="Smoking" name="room_id_is_smoking_allowed" domain="[('is_smoking_allowed', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Floor" name="group_by_floor" context="{'group_by':'floor'}"/>
+                        <filter string="Availability" name="group_by_is_available" context="{'group_by':'is_available'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="type" icon="fa-star-o" select="multi" enable_counters="1"/>
+                        <field name="view_type" icon="fa-star-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_room_form">
+            <field name="name">hotel.room.form</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_clean" string="Cleaned" class="oe_highlight" type="object" states="in_progress"/>
+                        <button name="action_dirty" string="Cleaning Required" class="oe_highlight" type="object" states="clean"/>
+                        <button name="action_in_progress" string="Cleaning In Progress" class="oe_highlight" type="object" states="dirty"/>
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="clean,dirty,in_progress"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h3>
+                                <label for="hotel_id" string="Hotel Name:" class="oe_edit_only"/>
+                                <field name="hotel_id" placeholder="Name" widget="selection" domain="[('is_hotel','=',True)]"/>
+                            </h3>
+                            <field name="tag_ids" widget="many2many_tags" placeholder="Tags" options="{'no_create': True,'color_field': 'color'}" domain="[('type', '=', 'tag_room')]"/>
+                        </div>
+                        <group string="Room Information" name="room_info">
+                            <group>
+                                <field name="room_no"/>
+                                <field name="type"/>
+                                <field name="capacity"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="is_smoking_allowed"/>
+                            </group>
+                            <group>
+                                <field name="floor"/>
+                                <field name="view_type"/>
+                                <field name="price_per_day" widget="monetary"/>
+                                <field name="is_available"/>
+                            </group>
+                        </group>
+                        <group string="Other Information" name="other_info">
+                            <group>
+                                <field name="maintenance_required"/>
+                            </group>
+                            <group>
+                                <field name="maintenance_reason" attrs="{'invisible': [('maintenance_required','!=',True)],'required': [('maintenance_required','=',True)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Reservations" name="reservations">
+                                <field name="reservation_ids">
+                                    <tree class="text-center" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'">
+                                        <field name="reservation_ref" decoration-bf="1"/>
+                                        <field name="guest_id" decoration-bf="1"/>
+                                        <field name="guest_ref" optional="hide"/>
+                                        <field name="duration" optional="show" decoration-bf="1"/>
+                                        <field name="gender" optional="hide"/>
+                                        <field name="reservation_date" optional="show"/>
+                                        <field name="email" optional="show"/>
+                                        <field name="phone_no" optional="show"/>
+                                        <field name="check_in_date" optional="show"/>
+                                        <field name="check_out_date" optional="show"/>
+                                        <field name="progress" widget="progressbar" optional="hide"/>
+                                        <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'" optional="show"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!--Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_room">
+            <field name="name">ROOMs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.room</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_room_id_is_available':1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Room!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Rooms" sequence="0" id="menu_hotel_room" parent="menu_room_detail_master" action="action_hotel_room"/>
+    </data>
+</odoo>

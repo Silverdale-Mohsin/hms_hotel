@@ -1,0 +1,81 @@
+<odoo>
+    <data>
+        <!-- INHERIT FORM -->
+        <record id="view_res_company_kanban_inherit" model="ir.ui.view">
+            <field name="name">res.company.kanban.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_res_company_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="inside">
+                    <field name="id"/>
+                </xpath>
+                <xpath expr="//div/div/i[@class='fa fa-building']" position="replace">
+                    <div>
+                        <img alt="logo" t-att-src="kanban_image('res.company','logo',record.id.raw_value)" style="width: 50%; height: 50%; object-fit: cover;"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <!-- INHERIT FORM -->
+        <record id="view_res_company_form_inherit" model="ir.ui.view">
+            <field name="name">res.company.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="is_hotel"/>
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="replace"/>
+                <xpath expr="//field[@name='company_registry']" position="replace"/>
+                <xpath expr="//field[@name='parent_id']" position="replace"/>
+                <xpath expr="//field[@name='mobile']" position="replace"/>
+                <xpath expr="//field[@name='favicon']" position="replace"/>
+                <xpath expr="//page[@name='general_info']" position="after">
+                    <page string="Bank Account" name="accounts">
+                        <field name="bank_account_ids">
+                            <tree editable="bottom" class="text-center">
+                                <field name="name"/>
+                                <field name="acc_type"/>
+                                <field name="acc_no"/>
+                                <field name="acc_balance"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='logo']" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" class="oe_stat_button" icon="fa-bank" name="action_view_bank_account">
+                            <field string="Account" name="bank_account_count" widget="statinfo"/>
+                        </button>
+                        <button type="object" class="oe_stat_button" icon="fa-bed" name="action_view_room">
+                            <field string="Room" name="room_count" widget="statinfo"/>
+                        </button>
+                        <button type="object" class="oe_stat_button" icon="fa-users" name="action_view_employee">
+                            <field string="Employee" name="employee_count" widget="statinfo"/>
+                        </button>
+                        <button type="object" class="oe_stat_button" icon="fa-users" name="action_view_guest">
+                            <field string="Guest" name="guest_count" widget="statinfo"/>
+                        </button>
+                        <button type="object" class="oe_stat_button" icon="fa-dollar" name="action_view_payment">
+                            <field string="Payment" name="payment_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <!-- MAIN ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel">
+            <field name="name">HOTELs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.company</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('is_hotel','=',True)]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Hotel!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Hotels" sequence="0" id="menu_hotel" parent="menu_hotel_detail_master" action="action_hotel"/>
+    </data>
+</odoo>

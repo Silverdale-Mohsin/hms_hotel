@@ -1,0 +1,114 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_service_tree">
+            <field name="name">hotel.service.tree</field>
+            <field name="model">hotel.service</field>
+            <field name="arch" type="xml">
+                <tree default_order="sequence asc" export_xlsx="0" class="text-center" sample="1" decoration-success="cost == 0" decoration-danger="cost > 0" decoration-bf="cost > 0">
+                    <field name="sequence"/>
+                    <field name="hotel_id"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="cost" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="service_type"/>
+                    <field name="location"/>
+                    <field name="contact_person"/>
+                    <field name="duration"/>
+                    <field name="is_available"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_service_search">
+            <field name="name">hotel.service.search</field>
+            <field name="model">hotel.service</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="contact_person"/>
+                    <field name="cost"/>
+                    <filter name="filter_cost_a" string="Cost(=0)" domain="[('cost','=',0)]"/>
+                    <filter name="filter_cost_b" string="Cost(>0)" domain="[('cost','>',0)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Contact Person" name="group_by_contact_person" context="{'group_by':'contact_person'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="contact_person" icon="fa-user-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_service_form">
+            <field name="name">hotel.service.form</field>
+            <field name="model">hotel.service</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Other Information" name="other_info">
+                            <group>
+                                <field name="hotel_id" widget="selection" domain="[('is_hotel','=',True)]"/>
+                            </group>
+                            <group>
+                                <field name="sequence"/>
+                            </group>
+                        </group>
+                        <group string="Service Information" name="service_info">
+                            <group>
+                                <field name="is_available"/>
+                                <field name="name"/>
+                                <field name="cost" widget="monetary"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="service_type"/>
+                                <field name="duration"/>
+                                <field name="location"/>
+                                <field name="contact_person" widget="selection"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Reservations" name="reservations">
+                                <field name="reservation_ids">
+                                    <tree class="text-center" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'">
+                                        <field name="reservation_ref" decoration-bf="1"/>
+                                        <field name="guest_id"/>
+                                        <field name="guest_ref" optional="hide"/>
+                                        <field name="room_id" decoration-bf="1"/>
+                                        <field name="duration" optional="show" decoration-bf="1"/>
+                                        <field name="reservation_date" optional="show"/>
+                                        <field name="check_in_date" optional="show"/>
+                                        <field name="check_out_date" optional="show"/>
+                                        <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'" optional="show"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!--Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_service">
+            <field name="name">SERVICEs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.service</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Service!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Services" sequence="10" id="menu_hotel_service" parent="menu_service_facility_detail_master" action="action_hotel_service"/>
+    </data>
+</odoo>

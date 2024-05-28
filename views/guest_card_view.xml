@@ -1,0 +1,38 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_guest_card_tree">
+            <field name="name">hotel.guest.card.tree</field>
+            <field name="model">hotel.guest.card</field>
+            <field name="arch" type="xml">
+                <tree export_xlsx="0" class="text-center" sample="1" decoration-info="card_type == 'visa'" decoration-warning="card_type == 'union_pay'" decoration-success="card_type == 'pay_pak'" decoration-danger="card_type == 'master'">
+                    <field name="card_type"/>
+                    <field name="card_number"/>
+                    <field name="card_expiry"/>
+                </tree>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_guest_card_form">
+            <field name="name">hotel.guest.card.form</field>
+            <field name="model">hotel.guest.card</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Card Information" name="card_info">
+                            <group>
+                                <field name="guest_id" widget="selection"/>
+                                <field name="card_type"/>
+                                <field name="card_expiry"/>
+                            </group>
+                            <group>
+                                <field name="guest_ref"/>
+                                <field name="card_number"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

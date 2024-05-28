@@ -1,0 +1,100 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_feedback_tree">
+            <field name="name">hotel.feedback.tree</field>
+            <field name="model">hotel.feedback</field>
+            <field name="arch" type="xml">
+                <tree export_xlsx="0" class="text-center" sample="1">
+                    <field name="guest_id"/>
+                    <field name="guest_ref"/>
+                    <field name="reservation_id"/>
+                    <field name="rating" widget="priority"/>
+                    <field name="feedback_date"/>
+                    <field name="comment"/>
+                    <field name="response_from_hotel"/>
+                    <field name="response_date"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_feedback_search">
+            <field name="name">hotel.feedback.search</field>
+            <field name="model">hotel.feedback</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="guest_id" filter_domain="['|',('guest_id','ilike',self),('guest_ref','ilike',self)]"/>
+                    <field name="guest_ref"/>
+                    <field name="reservation_id"/>
+                    <filter name="filter_worst" string="Worst" domain="[('rating','=','worst')]"/>
+                    <filter name="filter_bad" string="Bad" domain="[('rating','=','bad')]"/>
+                    <filter name="filter_normal" string="Normal" domain="[('rating','=','normal')]"/>
+                    <filter name="filter_good" string="Good" domain="[('rating','=','good')]"/>
+                    <filter name="filter_best" string="Best" domain="[('rating','=','best')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Guest" name="group_by_guest_id" context="{'group_by':'guest_id'}"/>
+                        <filter string="Rating" name="group_by_rating" context="{'group_by':'rating'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="guest_id" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="rating" icon="fa-star-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_feedback_form">
+            <field name="name">hotel.feedback.form</field>
+            <field name="model">hotel.feedback</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Feedback Information" name="feedback_info">
+                            <group>
+                                <field name="guest_id" widget="selection"/>
+                                <field name="guest_ref"/>
+                                <field name="rating" widget="priority"/>
+                            </group>
+                            <group>
+                                <field name="reservation_id" widget="selection" domain="[('guest_id', '=', guest_id),('state', '=', 'confirm')]"/>
+                                <field name="feedback_date"/>
+                                <field name="comment"/>
+                            </group>
+                        </group>
+                        <group string="Response Information" name="response_info" groups="hms_hotel.access_hotel_manager_level_group,hms_hotel.access_hotel_admin_level_group">
+                            <group>
+                                <field name="response_from_hotel"/>
+                            </group>
+                            <group>
+                                <field name="response_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- FORM ACTION -->
+        <record model="ir.actions.act_window" id="hms_hotel.action_feedback_form">
+            <field name="name">FEEDBACKs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.feedback</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_owner_id': active_id}</field>
+        </record>
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_feedback">
+            <field name="name">FEEDBACKs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.feedback</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Feedback!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Feedbacks" sequence="10" id="menu_hotel_feedback" parent="menu_feedback_detail_master" action="action_hotel_feedback"/>
+    </data>
+</odoo>

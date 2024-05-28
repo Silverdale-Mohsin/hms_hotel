@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_bank_account_tree">
+            <field name="name">hotel.bank.account.tree</field>
+            <field name="model">hotel.bank.account</field>
+            <field name="arch" type="xml">
+                <tree export_xlsx="0" class="text-center" sample="1" decoration-success="acc_type == 'current'" decoration-danger="acc_type == 'saving'">
+                    <field name="name"/>
+                    <field name="acc_type"/>
+                    <field name="acc_no"/>
+                    <field name="acc_balance" widget="monetary" readonly="1"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_bank_account_form">
+            <field name="name">hotel.bank.account.form</field>
+            <field name="model">hotel.bank.account</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <h3>
+                                <label for="hotel_id" string="Hotel Name:" class="oe_edit_only"/>
+                                <field name="hotel_id" placeholder="Name" widget="selection" domain="[('is_hotel','=',True)]"/>
+                            </h3>
+                        </div>
+                        <group string="Account Information" name="account_info">
+                            <group>
+                                <field name="name"/>
+                                <field name="acc_no"/>
+                            </group>
+                            <group>
+                                <field name="acc_type"/>
+                                <field name="acc_balance" widget="monetary" readonly="1"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

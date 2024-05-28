@@ -1,0 +1,223 @@
+<odoo>
+    <data>
+        <!-- KANBAN VIEW -->
+        <record id="view_hotel_guest_kanban" model="ir.ui.view">
+            <field name="name">hotel.guest.kanban</field>
+            <field name="model">hotel.guest</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="gender"/>
+                    <field name="card_count"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <t t-set="gender" t-value="record.gender.raw_value"/>
+                            <t t-set="card_count" t-value="record.card_count.raw_value"/>
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image" style="float: left; width: 80px; height: 100%;">
+                                    <img alt="Image" t-att-src="kanban_image('hotel.guest','image',record.id.raw_value)" style="width: 100%; height: 100%; object-fit: cover;"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <div style="margin-right:5px; margin-left:15px;">
+                                        <ul>
+                                            <div style="display:flex; justify-content:space-between;">
+                                                <li class="mb4" ><h3><field name="name"/></h3></li>
+                                                <li t-if="gender == 'male'" class="fa fa-mars" style="margin-right:5px; font-size:20px; color:blue" role="img" aria-label="Gender" title="Male"/>
+                                                <li t-if="gender == 'female'" class="fa fa-venus" style="margin-right:5px; font-size:20px; color:red" role="img" aria-label="Gender" title="Female"/>
+                                            </div>
+                                            <li><strong><field name="guest_ref"/></strong></li>
+                                            <li><strong>Age: </strong><field name="age"/></li>
+                                            <div style="display:flex; justify-content:space-between;">
+                                                <li><strong>Reservation: </strong><field name="reservation_count"/></li>
+                                                <li t-if="card_count > 0" class="fa fa-credit-card-alt" style="font-size:20px;" role="img" aria-label="Card" title="Male"/>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_guest_tree">
+            <field name="name">hotel.guest.tree</field>
+            <field name="model">hotel.guest</field>
+            <field name="arch" type="xml">
+                <tree export_xlsx="0" class="text-center" sample="1">
+                    <field name="guest_ref" decoration-bf="1" decoration-danger="1"/>
+                    <field name="name" decoration-bf="1"/>
+                    <field name="gender" optional="show" decoration-info="gender == 'male'" decoration-danger="gender == 'female'"/>
+                    <field name="date_of_birth" optional="hide"/>
+                    <field name="age" optional="show"/>
+                    <field name="marital_status" optional="hide"/>
+                    <field name="email" optional="show"/>
+                    <field name="phone_no" optional="show"/>
+                    <field name="cnic_no" optional="show"/>
+                    <field name="passport_no" optional="show"/>
+                    <field name="nationality" optional="show"/>
+                    <field name="reservation_count" optional="show" decoration-bf="1"/>
+                    <field name="emergency_contact_name" optional="hide"/>
+                    <field name="emergency_contact_number" optional="hide"/>
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" optional="show"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_guest_search">
+            <field name="name">hotel.guest.search</field>
+            <field name="model">hotel.guest</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" filter_domain="['|',('name','ilike',self),('guest_ref','ilike',self)]"/>
+                    <field name="guest_ref"/>
+                    <field name="age"/>
+                    <filter name="filter_male" string="Male" domain="[('gender','=','male')]"/>
+                    <separator/>
+                    <filter name="filter_female" string="Female" domain="[('gender','=','female')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Gender" name="group_by_type" context="{'group_by':'gender'}"/>
+                        <filter string="Marital Status" name="group_by_type" context="{'group_by':'marital_status'}"/>
+                        <filter string="Nationality" name="group_by_type" context="{'group_by':'nationality'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="gender" icon="fa-venus-mars" select="multi" enable_counters="1"/>
+                        <field name="marital_status" icon="fa-star-o" select="multi" enable_counters="1"/>
+                        <field name="nationality" icon="fa-star-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_guest_form">
+            <field name="name">hotel.guest.form</field>
+            <field name="model">hotel.guest</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="%(hms_hotel.action_feedback_form)d" icon="fa-comment-o" class="oe_highlight" string="Feedback" type="action"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" class="oe_stat_button" icon="fa-credit-card-alt" name="action_view_cards">
+                                <field string="Card" name="card_count" widget="statinfo"/>
+                            </button>
+                            <button type="object" class="oe_stat_button" icon="fa-list" name="action_view_reservations">
+                                <field string="Reservation" name="reservation_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="alert alert-info text-center o_form_header" role="alert" attrs="{'invisible':[('is_birthday','=',False)]}">
+                            <a class="close" data-dismiss="alert" href="#">x</a>
+                            <div><strong>Birthday Today!</strong></div>
+                            <div>Wish<field name="name" readonly="1"/></div>
+                        </div>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <h3><field name="guest_ref" readonly="1"/></h3>
+                            <h1>
+                                <label for="name" string="Name:" class="oe_edit_only"/>
+                                <field name="name" placeholder="Name"/>
+                            </h1>
+                            <field name="tag_ids" widget="many2many_tags" placeholder="Tags" options="{'no_create': True,'color_field': 'color'}" domain="[('type', '=', 'tag_guest')]"/>
+                        </div>
+                        <group string="Other Information" name="other_info">
+                            <group>
+                                <field name="hotel_id" widget="selection" domain="[('is_hotel','=',True)]"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="registration_date" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Personal Information" name="personal_info">
+                            <group>
+                                <field name="gender" widget="radio"/>
+                                <field name="email" widget="email"/>
+                                <field name="date_of_birth"/>
+                                <field name="nationality"/>.
+                                <field name="is_birthday"/>
+                            </group>
+                            <group>
+                                <field name="marital_status" widget="radio"/>
+                                <field name="phone_no" widget="phone"/>
+                                <field name="age" readonly="1"/>
+                                <field name="cnic_no" attrs="{'invisible': [('nationality','!=','pakistan')],'required': [('nationality','=','pakistan')]}"/>
+                                <field name="other_nationality" attrs="{'invisible': [('nationality','!=','other')], 'required': [('nationality','=','other')]}"/>
+                                <field name="passport_no" attrs="{'invisible': [('nationality','!=','other')],'required': [('nationality','=','other')]}"/>
+                            </group>
+                        </group>
+                        <group string="Emergency Information" name="emergency_info">
+                            <group>
+                                <field name="emergency_contact_name"/>
+                            </group>
+                            <group>
+                                <field name="emergency_contact_number"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Reservations" name="reservations">
+                                <field name="reservation_ids">
+                                    <tree class="text-center" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'">
+                                        <field name="reservation_ref" decoration-bf="1"/>
+                                        <field name="room_id" decoration-bf="1"/>
+                                        <field name="room_type" optional="hide"/>
+                                        <field name="room_view_type" optional="hide"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="price_per_day" optional="hide" widget="monetary"/>
+                                        <field name="service_ids" optional="hide"/>
+                                        <field name="service_total_price" widget="monetary" optional="hide"/>
+                                        <field name="facility_ids" optional="hide"/>
+                                        <field name="facility_total_price" widget="monetary" optional="hide"/>
+                                        <field name="duration" optional="show" decoration-bf="1"/>
+                                        <field name="reservation_date" optional="show"/>
+                                        <field name="check_in_date" optional="show"/>
+                                        <field name="check_out_date" optional="show"/>
+                                        <field name="progress" widget="progressbar" optional="hide"/>
+                                        <field name="receipt_number" optional="show"/>
+                                        <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'confirm'" decoration-danger="state == 'cancel'" decoration-muted="state == 'expire'" optional="show"/>
+                                        <field name="price_subtotal" decoration-bf="1" optional="show"/>
+                                        <field name="special_requests" optional="hide"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="amount_total" widget="monetary" style="font-size: larger; font-weight: bold;"/>
+                                </group>
+                            </page>
+                            <page string="Cards" name="cards">
+                                <field name="card_ids">
+                                    <tree class="text-center" editable="bottom" decoration-info="card_type == 'visa'" decoration-warning="card_type == 'union_pay'" decoration-success="card_type == 'pay_pak'" decoration-danger="card_type == 'master'">
+                                        <field name="card_type"/>
+                                        <field name="card_number"/>
+                                        <field name="card_expiry"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!--Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- MAIN ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_guest">
+            <field name="name">GUESTs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.guest</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Guest!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Guests" sequence="0" id="menu_hotel_guest" parent="menu_guest_detail_master" action="action_hotel_guest"/>
+    </data>
+</odoo>
