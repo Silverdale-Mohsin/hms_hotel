@@ -15,3 +15,5 @@ hms_hotel.access_hotel_facility,access_hotel_facility,hms_hotel.model_hotel_faci
 hms_hotel.access_hotel_feedback,access_hotel_feedback,hms_hotel.model_hotel_feedback,base.group_user,1,1,1,1
 hms_hotel.access_hotel_payment,access_hotel_payment,hms_hotel.model_hotel_payment,base.group_user,1,1,1,1
 hms_hotel.access_hotel_cancel_reservation_wizard,access_hotel_cancel_reservation_wizard,hms_hotel.model_hotel_cancel_reservation_wizard,base.group_user,1,1,1,1
+hms_hotel.access_hotel_department,access_hotel_department,hms_hotel.model_hotel_department,base.group_user,1,1,1,1
+hms_hotel.access_hotel_position,access_hotel_position,hms_hotel.model_hotel_position,base.group_user,1,1,1,1

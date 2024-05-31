@@ -1,0 +1,83 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_employee_department_tree">
+            <field name="name">hotel.employee.department.tree</field>
+            <field name="model">hotel.department</field>
+            <field name="arch" type="xml">
+                <tree class="text-center" export_xlsx="0" sample="1">
+                    <field name="hotel_id"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="head_of_department_id"/>
+                    <field name="created_date"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_employee_department_search">
+            <field name="name">hotel.employee.department.search</field>
+            <field name="model">hotel.department</field>
+            <field name="arch" type="xml">
+                <search>
+                    <searchpanel>
+                        <field name="hotel_id" icon="fa-user-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_employee_department_form">
+            <field name="name">hotel.employee.department.form</field>
+            <field name="model">hotel.department</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Guest Information" name="guest_info">
+                            <group>
+                                <field name="name"/>
+                                <field name="description"/>
+                                <field name="created_date"/>
+                            </group>
+                            <group>
+                                <field name="hotel_id" widget="selection" domain="[('is_hotel','=',True)]"/>
+                                <field name="head_of_department_id" widget="selection" domain="[('role', 'in', ['manager', 'admin'])]"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Positions" name="positions">
+                                <field name="position_ids">
+                                    <tree class="text-center">
+                                        <field name="name"/>
+                                        <field name="description"/>
+                                        <field name="salary_range"/>
+                                        <field name="created_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!--Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_employee_department">
+            <field name="name">DEPARTMENTs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.department</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Department!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Departments" sequence="10" id="menu_hotel_employee_department" parent="menu_dept_post_detail_master" action="action_hotel_employee_department"/>
+    </data>
+</odoo>

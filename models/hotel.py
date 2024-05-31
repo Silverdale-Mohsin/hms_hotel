@@ -10,7 +10,7 @@ class Hotel(models.Model):
     is_hotel = fields.Boolean(string="is_Hotel", default=True, tracking=True)
     bank_account_ids = fields.One2many('hotel.bank.account', 'hotel_id', string='Bank Accounts')
     bank_account_count = fields.Integer(string="Bank Account Count", compute='_compute_bank_account_count', store=True)
-    employee_ids = fields.One2many('hr.employee', 'hotel_id', string='Employees')
+    employee_ids = fields.One2many('res.users', 'hotel_id', string='Employees')
     employee_count = fields.Integer(string="Employee Count", compute='_compute_employee_count', store=True)
     room_ids = fields.One2many('hotel.room', 'hotel_id', string='Rooms')
     room_count = fields.Integer(string="Room Count", compute='_compute_room_count', store=True)
@@ -61,12 +61,12 @@ class Hotel(models.Model):
     @api.depends('employee_ids')
     def _compute_employee_count(self):
         for record in self:
-            record.employee_count = self.env['hr.employee'].search_count([('hotel_id', '=', record.id)])
+            record.employee_count = self.env['res.users'].search_count([('hotel_id', '=', record.id)])
     def action_view_employee(self):
         return {
             'type': 'ir.actions.act_window',
             'name': _('Employees'),
-            'res_model': 'hr.employee',
+            'res_model': 'res.users',
             'view_mode': 'kanban,list,form',
             'target': 'current',
             'context': {'default_hotel_id': self.id},

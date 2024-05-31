@@ -146,6 +146,10 @@ class HotelGuest(models.Model):
             if rec.reservation_ids:
                 raise ValidationError(_("Caution! Cannot delete a Guest with Reservation"))
 
+    def _get_report_base_filename(self):
+        return "PatientReport" # Static Report Name
+        # return self.name # Dynamic Report Name
+
     def action_view_reservations(self):
         return {
             'type': 'ir.actions.act_window',

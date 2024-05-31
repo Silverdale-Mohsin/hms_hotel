@@ -25,13 +25,13 @@
         <field name="company_id" eval="False"/>
     </record>
     <!-- EMPLOYEE -->
-<!--    <record model="ir.sequence" id="seq_hotel_employee">-->
-<!--        <field name="name">Hotel Employee</field>-->
-<!--        <field name="code">hotel.employee</field>-->
-<!--        <field name="prefix">HE</field>-->
-<!--        <field name="padding">4</field>-->
-<!--        <field name="company_id" eval="False"/>-->
-<!--    </record>-->
+    <record model="ir.sequence" id="seq_hotel_employee">
+        <field name="name">Hotel Employee</field>
+        <field name="code">res.users</field>
+        <field name="prefix">HE</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
     <!-- PAYMENT -->
 <!--    <record model="ir.sequence" id="seq_hotel_payment">-->
 <!--        <field name="name">Hotel Payment</field>-->

@@ -11,7 +11,7 @@
     'category': 'Uncategorized',
     'version': '1.0.0',
     # any module necessary for this one to work correctly
-    'depends': ['mail', 'base', 'product', 'hr'],
+    'depends': ['mail', 'base', 'product', 'hr', 'portal'],
     # always loaded
     'data': [
         # SEQURITY
@@ -24,6 +24,7 @@
         # WIZARD
         'wizard/cancel_reservation_view.xml',
         # VIEWS
+        'views/portal_template.xml',
         'views/menu.xml',
         'views/hotel_view.xml',
         'views/hotel_bank_account_view.xml',
@@ -34,6 +35,8 @@
         'views/tags_view.xml',
         'views/room_view.xml',
         'views/employee_view.xml',
+        'views/employee_department_view.xml',
+        'views/employee_position_view.xml',
         'views/service_view.xml',
         'views/facility_view.xml',
         'views/feedback_view.xml',

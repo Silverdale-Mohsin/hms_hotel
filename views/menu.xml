@@ -4,19 +4,20 @@
         <menuitem name="HOTEL" sequence="-20" id="menu_hotel_root" web_icon="hms_hotel,static/description/icon.png"/>
         <!-- MASTER MENU -->
         <menuitem name="Hotel" sequence="0" id="menu_hotel_master" parent="menu_hotel_root">
-            <menuitem name="Hotel:" sequence="0" id="menu_hotel_detail_master"/>
-            <menuitem name="Employee:" sequence="10" id="menu_employee_detail_master"/>
+            <menuitem name="Hotel" sequence="0" id="menu_hotel_detail_master"/>
+            <menuitem name="Employee" sequence="10" id="menu_employee_detail_master"/>
+            <menuitem name="Department/Position" sequence="20" id="menu_dept_post_detail_master"/>
         </menuitem>
         <menuitem name="Room" sequence="10" id="menu_hotel_room_master" parent="menu_hotel_root">
-            <menuitem name="Room:" sequence="0" id="menu_room_detail_master"/>
-            <menuitem name="Service and Facility:" sequence="10" id="menu_service_facility_detail_master"/>
+            <menuitem name="Room" sequence="0" id="menu_room_detail_master"/>
+            <menuitem name="Service and Facility" sequence="10" id="menu_service_facility_detail_master"/>
         </menuitem>
         <menuitem name="Guest" sequence="20" id="menu_hotel_guest_master" parent="menu_hotel_root">
-            <menuitem name="Guest:" sequence="0" id="menu_guest_detail_master"/>
-            <menuitem name="Feedback:" sequence="10" id="menu_feedback_detail_master"/>
+            <menuitem name="Guest" sequence="0" id="menu_guest_detail_master"/>
+            <menuitem name="Feedback" sequence="10" id="menu_feedback_detail_master"/>
         </menuitem>
         <menuitem name="Reservation" sequence="30" id="menu_hotel_reservation_master" parent="menu_hotel_root">
-            <menuitem name="Reservation:" sequence="0" id="menu_reservation_detail_master"/>
+            <menuitem name="Reservation" sequence="0" id="menu_reservation_detail_master"/>
         </menuitem>
         <menuitem name="Payment" sequence="40" id="menu_hotel_payment_master" parent="menu_hotel_root"/>
         <menuitem name="Setting" sequence="50" id="menu_hotel_setting_master" parent="menu_hotel_root"/>

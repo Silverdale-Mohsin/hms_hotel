@@ -1,17 +1,150 @@
 <odoo>
     <data>
-        <!-- INHERIT FORM -->
-        <record id="view_hr_employee_form_inherit" model="ir.ui.view">
-            <field name="name">hr.employee.inherit</field>
-            <field name="model">hr.employee</field>
-            <field name="inherit_id" ref="hr.view_employee_form"/>
+        <!-- INHERIT KANBAN -->
+        <record id="view_res_users_as_employees_kanban_inherit" model="ir.ui.view">
+            <field name="name">res.users.employees.kanban.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_res_users_kanban"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='coach_id']" position="replace"/>
-                <xpath expr="//field[@name='mobile_phone']" position="before">
-                    <field name="is_employee"/>
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="default_order">employee_ref asc</attribute>
                 </xpath>
-                <xpath expr="//field[@name='department_id']" position="before">
-                    <field name="hotel_id" widget="selection" domain="[('is_hotel','=',True)]"/>
+                <xpath expr="//kanban" position="inside">
+                    <field name="gender_new"/>
+                </xpath>
+                <xpath expr="//kanban/templates/t[@t-name='kanban-box']/div" position="replace">
+                    <t t-set="gender_new" t-value="record.gender_new.raw_value"/>
+                    <div t-attf-class="oe_kanban_global_click">
+                        <div class="o_kanban_image" style="float: left; width: 80px; height: 100%;">
+                            <img alt="Image" t-att-src="kanban_image('res.users','avatar_128',record.id.raw_value)" style="width: 100%; height: 100%; object-fit: cover;"/>
+                        </div>
+                        <div class="oe_kanban_details">
+                            <div style="margin-right:5px; margin-left:15px;">
+                                <ul>
+                                    <div style="display:flex; justify-content:space-between;">
+                                        <li class="mb4"><h3><field name="name"/></h3></li>
+                                        <li t-if="gender_new == 'male'" class="fa fa-mars" style="margin-right:5px; font-size:20px; color:blue" role="img" aria-label="Gender" title="Male"/>
+                                        <li t-if="gender_new == 'female'" class="fa fa-venus" style="margin-right:5px; font-size:20px; color:red" role="img" aria-label="Gender" title="Female"/>
+                                    </div>
+                                    <li><strong><field name="employee_ref"/></strong></li>
+                                    <li><strong>Age : </strong><field name="age"/></li>
+                                    <li><strong><field name="emp_department_id"/></strong></li>
+                                    <li><field name="emp_position_id"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <!-- INHERIT SEARCH -->
+        <record id="view_res_users_as_employees_search_inherit" model="ir.ui.view">
+            <field name="name">res.users.employees.search.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="employee_ref"/>
+                    <field name="age"/>
+                    <filter name="filter_male" string="Male" domain="[('gender_new','=','male')]"/>
+                    <separator/>
+                    <filter name="filter_female" string="Female" domain="[('gender_new','=','female')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Gender" name="group_by_type" context="{'group_by':'gender_new'}"/>
+                        <filter string="Marital Status" name="group_by_type" context="{'group_by':'marital_status'}"/>
+                        <filter string="Department" name="group_by_department_id" context="{'group_by':'emp_department_id'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="role" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="emp_department_id" icon="fa-user-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </xpath>
+            </field>
+        </record>
+        <!-- INHERIT TREE -->
+        <record id="view_res_users_as_employees_tree_inherit" model="ir.ui.view">
+            <field name="name">res.users.employees.tree.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="default_order">employee_ref asc</attribute>
+                </xpath>
+                <xpath expr="//tree/field[@name='name']" position="before">
+                    <field name="employee_ref" decoration-bf="1"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='login']" position="after">
+                    <field name="gender_new" optional="show"/>
+                    <field name="date_of_birth" optional="hide"/>
+                    <field name="age" optional="show"/>
+                    <field name="marital_status" optional="show"/>
+                    <field name="phone_no" optional="show"/>
+                    <field name="cnic_no" optional="show"/>
+                    <field name="emergency_contact_name" optional="hide"/>
+                    <field name="emergency_contact_number" optional="hide"/>
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- INHERIT FORM -->
+        <record id="view_res_users_as_employees_form_inherit" model="ir.ui.view">
+            <field name="name">res.users.employees.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_simple_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='avatar_128']" position="before">
+                    <div class="alert alert-info text-center o_form_header" role="alert" attrs="{'invisible':[('is_birthday','=',False)]}">
+                        <a class="close" data-dismiss="alert" href="#">x</a>
+                        <div><strong>Birthday Today!</strong></div>
+                        <div>Wish<field name="name" readonly="1"/></div>
+                    </div>
+                </xpath>
+                <xpath expr="//form/sheet/div[@class='oe_title']/label[@for='name']" position="before">
+                    <h2><field name="employee_ref"/></h2>
+                </xpath>
+                <xpath expr="//form/sheet/div[@class='oe_title']/label[@for='company_id']" position="after">
+                    <field name="tag_ids" widget="many2many_tags" placeholder="Tags" options="{'no_create': True,'color_field': 'color'}" domain="[('type', '=', 'tag_employee')]"/>
+                </xpath>
+                <xpath expr="//group[@name='phone_numbers']" position="replace">
+                    <group string="Other Information" name="other_info">
+                        <group>
+                            <field name="hotel_id" widget="selection" domain="[('is_hotel','=',True)]"/>
+                            <field name="is_employee"/>
+                        </group>
+                        <group>
+                            <field name="registration_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Personal Information" name="personal_info">
+                        <group>
+                            <field name="gender_new" widget="radio"/>
+                            <field name="cnic_no"/>
+                            <field name="date_of_birth"/>
+                            <field name="is_birthday"/>
+                        </group>
+                        <group>
+                            <field name="marital_status" widget="radio"/>
+                            <field name="phone_no" widget="phone"/>
+                            <field name="age" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Work Information" name="work_info">
+                        <group>
+                            <field name="emp_department_id" widget="selection"/>
+                            <field name="role"/>
+                        </group>
+                        <group>
+                            <field name="emp_position_id" widget="selection" domain="[('department_id','=',emp_department_id)]"/>
+                        </group>
+                    </group>
+                    <group string="Emergency Contact Information" name="emergency_info">
+                        <group>
+                            <field name="emergency_contact_name"/>
+                        </group>
+                        <group>
+                            <field name="emergency_contact_number"/>
+                        </group>
+                    </group>
                 </xpath>
             </field>
         </record>
@@ -19,9 +152,10 @@
         <record model="ir.actions.act_window" id="action_hotel_employee">
             <field name="name">EMPLOYEEs</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">hr.employee</field>
+            <field name="res_model">res.users</field>
             <field name="view_mode">kanban,list,form</field>
-            <field name="context">{}</field>
+            <field name="domain">[('is_employee','=',True)]</field>
+            <field name="context">{'search_default_group_by_department_id':1}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">Create your first Employee!</p>
             </field>
