@@ -38,11 +38,15 @@ class HotelPayment(models.Model):
                 raise ValidationError(_("Can only delete Payments in DRAFT state"))
         return super(HotelPayment, self).unlink()
 
-    @api.onchange('card_id', 'card_number')
-    def _onchange_card_fields(self):
-        if self.card_id:
+    @api.onchange('payment_method')
+    def _onchange_payment_method(self):
+        if self.payment_method == 'cash':
+            self.card_id = False
             self.card_number = False
             self.card_expiry = False
+
+    @api.onchange('card_id', 'card_number')
+    def _onchange_card_fields(self):
         if self.card_id and self.card_number:
             cards = self.env['hotel.guest.card'].search([('guest_id', '=', self.guest_id.id), ('card_type', '=', self.card_id.card_type)])
             for card in cards:

@@ -1,0 +1,117 @@
+<odoo>
+    <data>
+        <!-- TREE VIEW -->
+        <record model="ir.ui.view" id="view_hotel_complaint_tree">
+            <field name="name">hotel.complaint.tree</field>
+            <field name="model">hotel.complaint</field>
+            <field name="arch" type="xml">
+                <tree export_xlsx="0" class="text-center" sample="1">
+                    <field name="priority" widget="priority"/>
+                    <field name="hotel_id"/>
+                    <field name="complaint_no"/>
+                    <field name="guest_id"/>
+                    <field name="guest_ref"/>
+                    <field name="reservation_id"/>
+                    <field name="subject"/>
+                    <field name="description"/>
+                    <field name="created_date"/>
+                    <field name="assigned_to"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'in_progress'" decoration-success="state == 'resolved'" decoration-danger="state == 'cancelled'" optional="show"/>
+                </tree>
+            </field>
+        </record>
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="view_hotel_complaint_search">
+            <field name="name">hotel.complaint.search</field>
+            <field name="model">hotel.complaint</field>
+            <field name="arch" type="xml">
+                <search>
+                    <!--                    <field name="guest_id" filter_domain="['|',('guest_id','ilike',self),('guest_ref','ilike',self)]"/>-->
+                    <!--                    <field name="guest_ref"/>-->
+                    <!--                    <field name="reservation_id"/>-->
+                    <!--                    <filter name="filter_worst" string="Worst" domain="[('rating','=','worst')]"/>-->
+                    <!--                    <filter name="filter_bad" string="Bad" domain="[('rating','=','bad')]"/>-->
+                    <!--                    <filter name="filter_normal" string="Normal" domain="[('rating','=','normal')]"/>-->
+                    <!--                    <filter name="filter_good" string="Good" domain="[('rating','=','good')]"/>-->
+                    <!--                    <filter name="filter_best" string="Best" domain="[('rating','=','best')]"/>-->
+                    <!--                    <group expand="0" string="Group By">-->
+                    <!--                        <filter string="Guest" name="group_by_guest_id" context="{'group_by':'guest_id'}"/>-->
+                    <!--                        <filter string="Rating" name="group_by_rating" context="{'group_by':'rating'}"/>-->
+                    <!--                    </group>-->
+                    <searchpanel>
+                        <field name="state" icon="fa-user-o" select="multi" enable_counters="1"/>
+                        <field name="priority" icon="fa-star-o" select="multi" enable_counters="1"/>
+                        <field name="assigned_to" icon="fa-star-o" select="multi" enable_counters="1"/>
+                        <field name="guest_id" icon="fa-star-o" select="multi" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="view_hotel_complaint_form">
+            <field name="name">hotel.complaint.form</field>
+            <field name="model">hotel.complaint</field>
+            <field name="arch" type="xml">
+                <form>
+                     <header>
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,in_progress,resolved,cancelled"/>
+                    </header>
+                    <sheet>
+                        <div style="display: flex; justify-content: space-between;">
+                            <h2><field name="complaint_no" readonly="1"/></h2>
+                            <div class="oe_title">
+                                <h1><field name="priority" widget="priority"/></h1>
+                            </div>
+                        </div>
+                        <div>
+                            <field name="tag_ids" widget="many2many_tags" placeholder="Tags" options="{'no_create': True,'color_field': 'color'}" domain="[('type', '=', 'tag_reservation')]"/>
+                        </div>
+                        <group>
+                            <group string="Complaint Information" name="complaint_info">
+                                <field name="subject"/>
+                                <field name="description"/>
+                                <field name="created_date"/>
+                                <field name="assigned_to"/>
+                            </group>
+                            <group string="Guest Information" name="guest_info">
+                                <field name="guest_id" widget="selection"/>
+                                <field name="hotel_id"/>
+                                <field name="guest_ref"/>
+                                <field name="reservation_id" widget="selection" domain="[('guest_id', '=', guest_id)]"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <!--Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- FORM ACTION -->
+<!--        <record model="ir.actions.act_window" id="hms_hotel.action_feedback_form">-->
+<!--            <field name="name">FEEDBACKs</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">hotel.feedback</field>-->
+<!--            <field name="view_mode">form</field>-->
+<!--            <field name="target">new</field>-->
+<!--            <field name="context">{'default_owner_id': active_id}</field>-->
+<!--        </record>-->
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_hotel_complaint">
+            <field name="name">COMPLAINTs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.complaint</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Complaint!</p>
+            </field>
+        </record>
+        <!-- MENU -->
+        <menuitem name="Complaints" sequence="20" id="menu_hotel_complaint" parent="menu_feedback_detail_master" action="action_hotel_complaint"/>
+    </data>
+</odoo>

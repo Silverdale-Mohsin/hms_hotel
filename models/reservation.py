@@ -35,7 +35,7 @@ class HotelReservation(models.Model):
     # TAG
     tag_ids = fields.Many2many('hotel.tag', string="Tags", tracking=True)
     # PAYMENT
-    receipt_number = fields.Char(string='Receipt Number', compute='_compute_receipt_number', store=True, tracking=True)
+    receipt_number = fields.Char(string='Receipt Number', compute='_compute_receipt_number', tracking=True)
     # RESERVATION
     reservation_ref = fields.Char(string='Reference', default='New', tracking=True)
     reservation_date = fields.Date(string='Reservation Date', default=fields.Date.context_today, tracking=True)

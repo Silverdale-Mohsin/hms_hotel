@@ -32,12 +32,12 @@
         <field name="padding">4</field>
         <field name="company_id" eval="False"/>
     </record>
-    <!-- PAYMENT -->
-<!--    <record model="ir.sequence" id="seq_hotel_payment">-->
-<!--        <field name="name">Hotel Payment</field>-->
-<!--        <field name="code">hotel.payment</field>-->
-<!--        <field name="prefix">REC</field>-->
-<!--        <field name="padding">4</field>-->
-<!--        <field name="company_id" eval="False"/>-->
-<!--    </record>-->
+    <!-- COMPLAINT -->
+    <record model="ir.sequence" id="seq_hotel_complaint">
+        <field name="name">Hotel Complaint</field>
+        <field name="code">hotel.complaint</field>
+        <field name="prefix">COMP</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
 </odoo>

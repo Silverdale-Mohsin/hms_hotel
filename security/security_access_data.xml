@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!--ACCESS RIGHT-->
-    <!--RECORD RULES-->
-<!--    <record id="access_for_guest_feedback_response" model="ir.rule">-->
-<!--        <field name="name">Guest Feedback Response</field>-->
-<!--        <field name="model_id" ref="hms_hotel.model_hotel_feedback"/>-->
-<!--        <field name="domain_force">[('create_uid', '=', user.id)]</field>-->
-<!--        <field name="groups" eval="[(4, ref('om_hospital.access_patient_profile_group_one'))]"/>-->
-<!--    </record>-->
+
     <!--MAIN CATEGORY-->
     <record model="ir.module.category" id="hms_hotel_main_combobox_category">
         <field name="name">Hotel Management System</field>
@@ -31,5 +25,16 @@
         <field name="name">Administrator</field>
         <field name="category_id" ref="hms_hotel.hms_hotel_sub_combobox_category"/>
         <field name="implied_ids" eval="[(6,0, [ref('hms_hotel.access_hotel_manager_level_group')])]"/>
+    </record>
+
+    <record id="group_access_guest_complaint" model="res.groups">
+        <field name="name">Guest Complaint</field>
+    </record>
+    <!--RECORD RULES-->
+    <record id="rule_access_guest_complaint" model="ir.rule">
+        <field name="name">Access guest complaints</field>
+        <field name="model_id" ref="hms_hotel.model_hotel_complaint"/>
+        <field name="domain_force">[('assigned_to.id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('hms_hotel.group_access_guest_complaint'))]"/>
     </record>
 </odoo>

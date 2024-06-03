@@ -11,7 +11,7 @@
     'category': 'Uncategorized',
     'version': '1.0.0',
     # any module necessary for this one to work correctly
-    'depends': ['mail', 'base', 'product', 'hr', 'portal'],
+    'depends': ['mail', 'base', 'product', 'hr', 'portal', 'report_xlsx'],
     # always loaded
     'data': [
         # SEQURITY
@@ -42,6 +42,7 @@
         'views/feedback_view.xml',
         'views/payment_view.xml',
         'views/settings_views.xml',
+        'views/complaint_view.xml',
         # REPORT
         'report/report.xml',
         'report/guest_detail.xml',

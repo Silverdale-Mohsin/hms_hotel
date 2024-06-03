@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from . import hotel
 from . import guest
 from . import guest_card
@@ -8,6 +7,7 @@ from . import tags
 from . import room
 from . import employee
 from . import feedback
+from . import complaint
 from . import payment
 from . import booking
 from . import service

@@ -11,6 +11,16 @@
         <field name="binding_model_id" ref="model_hotel_guest"/>
         <field name="binding_type">report</field>
     </record>
+    <record id="report_xls_guest_details" model="ir.actions.report">
+        <field name="name">Guest Detail Xls</field>
+        <field name="model">hotel.guest</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hms_hotel.report_xls_guest_detail</field>
+        <field name="report_file">hms_hotel.report_xls_guest_detail</field>
+        <field name="print_report_name">'Guest-Detail'</field>
+        <field name="binding_model_id" ref="model_hotel_guest"/>
+        <field name="binding_type">report</field>
+    </record>
     <!--RESERVATION DETAIL-->
     <record id="report_reservation_details" model="ir.actions.report">
         <field name="name">Reservation Detail</field>
