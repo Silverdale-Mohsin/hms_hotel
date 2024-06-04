@@ -32,4 +32,15 @@
         <field name="binding_model_id" ref="model_hotel_reservation"/>
         <field name="binding_type">report</field>
     </record>
+    <!--PAYMENT DETAIL-->
+    <record id="report_xls_payment_details" model="ir.actions.report">
+        <field name="name">Payment Detail Xls</field>
+        <field name="model">hotel.payment</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hms_hotel.report_xls_payment_detail</field>
+        <field name="report_file">hms_hotel.report_xls_payment_detail</field>
+        <field name="print_report_name">'Payment-Detail'</field>
+        <field name="binding_model_id" ref="model_hotel_payment"/>
+        <field name="binding_type">report</field>
+    </record>
 </odoo>

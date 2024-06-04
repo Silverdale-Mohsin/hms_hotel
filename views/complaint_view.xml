@@ -26,18 +26,18 @@
             <field name="model">hotel.complaint</field>
             <field name="arch" type="xml">
                 <search>
-                    <!--                    <field name="guest_id" filter_domain="['|',('guest_id','ilike',self),('guest_ref','ilike',self)]"/>-->
-                    <!--                    <field name="guest_ref"/>-->
-                    <!--                    <field name="reservation_id"/>-->
-                    <!--                    <filter name="filter_worst" string="Worst" domain="[('rating','=','worst')]"/>-->
-                    <!--                    <filter name="filter_bad" string="Bad" domain="[('rating','=','bad')]"/>-->
-                    <!--                    <filter name="filter_normal" string="Normal" domain="[('rating','=','normal')]"/>-->
-                    <!--                    <filter name="filter_good" string="Good" domain="[('rating','=','good')]"/>-->
-                    <!--                    <filter name="filter_best" string="Best" domain="[('rating','=','best')]"/>-->
-                    <!--                    <group expand="0" string="Group By">-->
-                    <!--                        <filter string="Guest" name="group_by_guest_id" context="{'group_by':'guest_id'}"/>-->
-                    <!--                        <filter string="Rating" name="group_by_rating" context="{'group_by':'rating'}"/>-->
-                    <!--                    </group>-->
+                    <field name="complaint_no"/>
+                    <field name="guest_id"/>
+                    <field name="guest_ref"/>
+                    <field name="reservation_id"/>
+                    <field name="assigned_to"/>
+                    <filter name="filter_priority_normal" string="Normal" domain="[('priority','=','normal')]"/>
+                    <filter name="filter_priority_urgent" string="Urgent" domain="[('priority','=','urgent')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Guest" name="group_by_guest_id" context="{'group_by':'guest_id'}"/>
+                        <filter string="Assigned to" name="group_by_assigned_to" context="{'group_by':'assigned_to'}"/>
+                        <filter string="Priority" name="group_by_priority" context="{'group_by':'priority'}"/>
+                    </group>
                     <searchpanel>
                         <field name="state" icon="fa-user-o" select="multi" enable_counters="1"/>
                         <field name="priority" icon="fa-star-o" select="multi" enable_counters="1"/>
@@ -53,7 +53,10 @@
             <field name="model">hotel.complaint</field>
             <field name="arch" type="xml">
                 <form>
-                     <header>
+                    <header>
+                        <button name="action_in_progress" string="In Progress" type="object" states="draft" class="oe_highlight"/>
+                        <button name="action_resolved" string="Issue Resolved" type="object" states="in_progress" class="oe_highlight"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="draft,in_progress"/>
                         <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,in_progress,resolved,cancelled"/>
                     </header>
                     <sheet>

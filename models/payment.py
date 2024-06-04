@@ -7,7 +7,7 @@ class HotelPayment(models.Model):
     _name = 'hotel.payment'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Hotel Payment'
-    _rec_name = 'reservation_id'
+    _rec_name = 'receipt_number'
 
     receipt_number = fields.Char(string='Receipt Number', default='New', tracking=True)
     guest_id = fields.Many2one('hotel.guest', string="Guest", tracking=True, required=True)

@@ -37,4 +37,15 @@
         <field name="domain_force">[('assigned_to.id','=',user.id)]</field>
         <field name="groups" eval="[(4, ref('hms_hotel.group_access_guest_complaint'))]"/>
     </record>
+
+    <!--    <record id="rule_manager_create_employee" model="ir.rule">-->
+    <!--        <field name="name">Allow managers to create employee</field>-->
+    <!--        <field name="model_id" ref="base.model_res_users"/>-->
+    <!--        <field name="domain_force">[('role', '=', 'manager')]</field>-->
+    <!--        <field name="perm_read">1</field>-->
+    <!--        <field name="perm_write">1</field>-->
+    <!--        <field name="perm_create">1</field>-->
+    <!--        <field name="perm_unlink">0</field>-->
+    <!--        <field name="groups" eval="[(4, ref('hms_hotel.group_access_guest_complaint'))]"/>-->
+    <!--    </record>-->
 </odoo>

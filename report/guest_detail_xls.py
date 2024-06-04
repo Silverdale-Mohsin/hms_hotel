@@ -8,8 +8,6 @@ class GuestDetailXlsx(models.AbstractModel):
     _inherit = 'report.report_xlsx.abstract'
 
     def generate_xlsx_report(self, workbook, data, guests):
-        # sheet = workbook.add_worksheet('Guests Detail')
-        # bold = workbook.add_format({'bold': True})
         for obj in guests:
             row = 2
             col = 0
