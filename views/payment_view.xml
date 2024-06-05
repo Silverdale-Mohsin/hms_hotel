@@ -38,12 +38,10 @@
                     <filter string="Credit Card" name="payment_type_credit_card" domain="[('payment_method', '=', 'credit_card')]"/>
                     <filter string="Payment Successful" name="payment_is_successful" domain="[('is_successful', '=', True)]"/>
                     <group expand="0" string="Group By">
-                        <filter string="Hotel" name="group_by_hotel_id" context="{'group_by':'hotel_id'}"/>
                         <filter string="Guest" name="group_by_guest_id" context="{'group_by':'guest_id'}"/>
                         <filter string="Payment Method" name="group_by_payment_method" context="{'group_by':'payment_method'}"/>
                     </group>
                     <searchpanel>
-                        <field name="hotel_id" icon="fa-user-o" select="multi" enable_counters="1"/>
                         <field name="guest_id" icon="fa-user-o" select="multi" enable_counters="1"/>
                         <field name="payment_method" icon="fa-usd" select="multi" enable_counters="1"/>
                     </searchpanel>

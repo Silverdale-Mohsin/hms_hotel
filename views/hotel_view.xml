@@ -37,7 +37,8 @@
                                 <field name="name"/>
                                 <field name="acc_type"/>
                                 <field name="acc_no"/>
-                                <field name="acc_balance"/>
+                                <field name="acc_balance" widget="monetary" readonly="1"/>
+                                <field name="currency_id" invisible="1"/>
                             </tree>
                         </field>
                     </page>

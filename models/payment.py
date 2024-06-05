@@ -22,7 +22,7 @@ class HotelPayment(models.Model):
     payment_method = fields.Selection([('cash','Cash'),('credit_card','Credit Card')], string="Payment Method", tracking=True, required=True)
     is_successful = fields.Boolean(string="Payment Successful", tracking=True)
     state = fields.Selection([('draft','Draft'),('successful','Successful')], default="draft", string="Status", required=True, tracking=True)
-    hotel_id = fields.Many2one('res.company', string='Hotel', tracking=True, required=True)
+    hotel_id = fields.Many2one(related='guest_id.hotel_id', string='Hotel', tracking=True, required=True)
 
     @api.model
     def create(self, vals):

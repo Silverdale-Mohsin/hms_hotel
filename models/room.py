@@ -29,9 +29,16 @@ class HotelRoom(models.Model):
         reservations = self.env['hotel.reservation'].search([('state', '=', 'confirm'),('check_out_date', '<', fields.Date.today())])
         for reservation in reservations:
             if reservation.room_id:
-                reservation.room_id.write({'is_available': True})
+                reservation.room_id.write({'is_available': True, 'same_room_reserve': 0})
                 if reservation.room_id.state == 'clean':
                     reservation.room_id.action_dirty()
+                    self._room_needs_cleaning()
+
+    def _room_needs_cleaning(self):
+        template = self.env.ref('hms_hotel.room_needs_cleaning_mail_template')
+        for rec in self:
+            if rec.assigned_to.email:
+                template.send_mail(rec.id, force_send=True)
 
     def action_clean(self):
         for rec in self:

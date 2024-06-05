@@ -12,7 +12,7 @@
                     <field name="view_type"/>
                     <field name="floor"/>
                     <field name="capacity"/>
-                    <field name="same_room_reserve" decoration-bf="1"/>
+                    <field name="same_room_reserve" decoration-bf="1" readonly="1"/>
                     <field name="currency_id" invisible="1"/>
                     <field name="price_per_day" widget="monetary"/>
                     <field name="is_available"/>

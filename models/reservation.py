@@ -81,19 +81,22 @@ class HotelReservation(models.Model):
             self._send_same_room_notification(reservation)
     def _handle_state_transition_and_room_change(self, reservation, vals):
         if 'state' in vals:
-            if reservation.state == 'pending' and vals['state'] != 'pending' and reservation.room_id:
+            if reservation.state == 'pending' and vals['state'] != 'pending' and reservation.room_id and reservation.room_id.is_available:
                 reservation.room_id.same_room_reserve -= 1
-            elif reservation.state != 'pending' and vals['state'] == 'pending' and reservation.room_id:
+            elif reservation.state != 'pending' and vals['state'] == 'pending' and reservation.room_id and reservation.room_id.is_available:
                 reservation.room_id.same_room_reserve += 1
                 self._send_same_room_notification(reservation)
-            elif vals['state'] == 'confirm' and reservation.room_id:
+            if vals['state'] == 'confirm' and reservation.room_id:
                 reservation.room_id.same_room_reserve = 0
         if 'room_id' in vals and vals['room_id'] != reservation.room_id.id and reservation.state == 'pending':
-            if reservation.room_id:
+            if reservation.room_id and reservation.room_id.is_available:
                 reservation.room_id.same_room_reserve -= 1
             new_room = self.env['hotel.room'].browse(vals['room_id'])
-            new_room.same_room_reserve += 1
-            self._send_same_room_notification(reservation, new_room)
+            if new_room.is_available:
+                new_room.same_room_reserve += 1
+                self._send_same_room_notification(reservation, new_room)
+            # new_room.same_room_reserve += 1
+            # self._send_same_room_notification(reservation, new_room)
     def _handle_state_cancel_or_expire(self, reservation, vals):
         if 'state' in vals and vals['state'] in ['cancel', 'expire']:
             if reservation.room_id:
