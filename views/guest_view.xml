@@ -97,7 +97,7 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="%(hms_hotel.action_feedback_form)d" icon="fa-comment-o" class="oe_highlight" string="Feedback" type="action"/>
+                        <button name="%(hms_hotel.action_complaint_form)d" icon="fa-comment-o" class="oe_highlight" string="Complaint" type="action"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">

@@ -43,4 +43,5 @@
         <field name="binding_model_id" ref="model_hotel_payment"/>
         <field name="binding_type">report</field>
     </record>
+
 </odoo>

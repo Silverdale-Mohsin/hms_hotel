@@ -23,6 +23,15 @@ class HotelRoom(models.Model):
     tag_ids = fields.Many2many('hotel.tag', string="Tags", tracking=True)
     hotel_id = fields.Many2one('res.company', string='Hotels', required=True, tracking=True)
     same_room_reserve = fields.Integer(string='Room Reserve Count', default=0, tracking=True)
+    assigned_to = fields.Many2one('res.users', string='Assigned To', required=True)
+
+    def _update_room_state(self):
+        reservations = self.env['hotel.reservation'].search([('state', '=', 'confirm'),('check_out_date', '<', fields.Date.today())])
+        for reservation in reservations:
+            if reservation.room_id:
+                reservation.room_id.write({'is_available': True})
+                if reservation.room_id.state == 'clean':
+                    reservation.room_id.action_dirty()
 
     def action_clean(self):
         for rec in self:

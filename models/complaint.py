@@ -26,22 +26,31 @@ class HotelComplaint(models.Model):
     guest_ref = fields.Char(related='guest_id.guest_ref', string="Guest Reference", required=True)
     reservation_id = fields.Many2one('hotel.reservation', string="Reservation", required=True)
     tag_ids = fields.Many2many('hotel.tag', string="Tags", tracking=True)
-    # response_from_hotel = fields.Text(string="Response")
-    # response_date = fields.Date(string="Response Date")
 
     @api.model
     def create(self, vals):
         vals['complaint_no'] = self.env['ir.sequence'].next_by_code('hotel.complaint')
-        self._complaint_receiving_mail()
-        return super(HotelComplaint, self).create(vals)
+        complaint = super(HotelComplaint, self).create(vals)
+        complaint._complaint_receiving_mail_for_guest()
+        complaint._complaint_receiving_mail_for_assigned()
+        return complaint
 
-    def _complaint_receiving_mail(self):
-        template = self.env.ref('hms_hotel.complaint_receiving_template')
-        print("Mail")
+    def _complaint_receiving_mail_for_guest(self):
+        template = self.env.ref('hms_hotel.complaint_receiving_template_for_guest')
         for rec in self:
-            print("Guest Mail")
             if rec.guest_id.email:
-                print("Guest Mail", rec.guest_id.email)
+                template.send_mail(rec.id, force_send=True)
+
+    def _complaint_receiving_mail_for_assigned(self):
+        template = self.env.ref('hms_hotel.complaint_receiving_template_for_assigned')
+        for rec in self:
+            if rec.assigned_to.email:
+                template.send_mail(rec.id, force_send=True)
+
+    def _complaint_resolved_mail_for_guest(self):
+        template = self.env.ref('hms_hotel.complaint_resolved_template_for_guest')
+        for rec in self:
+            if rec.guest_id.email:
                 template.send_mail(rec.id, force_send=True)
 
     def action_in_progress(self):
@@ -53,6 +62,7 @@ class HotelComplaint(models.Model):
         for rec in self:
             if rec.state == "in_progress":
                 rec.state = 'resolved'
+                rec._complaint_resolved_mail_for_guest()
         return {
             'effect': {
                 'fadeout': 'slow',

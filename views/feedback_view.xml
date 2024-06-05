@@ -95,6 +95,6 @@
             </field>
         </record>
         <!-- MENU -->
-        <menuitem name="Feedbacks" sequence="10" id="menu_hotel_feedback" parent="menu_feedback_detail_master" action="action_hotel_feedback"/>
+<!--        <menuitem name="Feedbacks" sequence="10" id="menu_hotel_feedback" parent="menu_feedback_detail_master" action="action_hotel_feedback"/>-->
     </data>
 </odoo>

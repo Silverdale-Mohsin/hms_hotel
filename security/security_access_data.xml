@@ -28,7 +28,10 @@
     </record>
 
     <record id="group_access_guest_complaint" model="res.groups">
-        <field name="name">Guest Complaint</field>
+        <field name="name">Guest Complaint Access</field>
+    </record>
+    <record id="group_employee_room_access" model="res.groups">
+        <field name="name">Room Access for Employee</field>
     </record>
     <!--RECORD RULES-->
     <record id="rule_access_guest_complaint" model="ir.rule">
@@ -37,15 +40,10 @@
         <field name="domain_force">[('assigned_to.id','=',user.id)]</field>
         <field name="groups" eval="[(4, ref('hms_hotel.group_access_guest_complaint'))]"/>
     </record>
-
-    <!--    <record id="rule_manager_create_employee" model="ir.rule">-->
-    <!--        <field name="name">Allow managers to create employee</field>-->
-    <!--        <field name="model_id" ref="base.model_res_users"/>-->
-    <!--        <field name="domain_force">[('role', '=', 'manager')]</field>-->
-    <!--        <field name="perm_read">1</field>-->
-    <!--        <field name="perm_write">1</field>-->
-    <!--        <field name="perm_create">1</field>-->
-    <!--        <field name="perm_unlink">0</field>-->
-    <!--        <field name="groups" eval="[(4, ref('hms_hotel.group_access_guest_complaint'))]"/>-->
-    <!--    </record>-->
+    <record id="rule_employee_room_access" model="ir.rule">
+        <field name="name">Employee Room Access</field>
+        <field name="model_id" ref="hms_hotel.model_hotel_room"/>
+        <field name="domain_force">[('assigned_to.id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('hms_hotel.group_employee_room_access'))]"/>
+    </record>
 </odoo>

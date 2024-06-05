@@ -4,9 +4,9 @@ from odoo import http, _
 from odoo.tools import groupby as groupbyelement
 from operator import itemgetter
 
-class HotelPortal(CustomerPortal):
+class HotelGuestPortal(CustomerPortal):
     def _prepare_home_portal_values(self, counters):
-        rtn = super(HotelPortal, self)._prepare_home_portal_values(counters)
+        rtn = super(HotelGuestPortal, self)._prepare_home_portal_values(counters)
         rtn['guest_count'] = request.env['hotel.guest'].search_count([])
         return rtn
 
@@ -29,21 +29,21 @@ class HotelPortal(CustomerPortal):
             'gender': {'input': 'gender', 'label':_("Gender"), 'order': 1},
             'marital_status': {'input': 'marital_status', 'label':_("Marital Status"), 'order': 1}
         }
-        guest_group_by = groupby_list.get(groupby, {})
+        reservation_group_by = groupby_list.get(groupby, {})
         default_order_by = sorted_list[sortby]['order']
         if groupby in ("gender", "marital_status"):
-            guest_group_by = guest_group_by.get("input")
-            default_order_by = guest_group_by+","+default_order_by
+            reservation_group_by = reservation_group_by.get("input")
+            default_order_by = reservation_group_by+","+default_order_by
         else:
-            guest_group_by = ''
+            reservation_group_by = ''
         search_domain = search_list[search_in]['domain']
-        guest_obj = request.env['hotel.guest']
-        total_guest = guest_obj.search_count(search_domain)
+        reservation_obj = request.env['hotel.guest']
+        total_guest = reservation_obj.search_count(search_domain)
         guest_url = '/my/guests'
         page_detail = pager(url=guest_url, total=total_guest, page=page, url_args={'sortby': sortby, 'search_in': search_in, 'search': search, 'groupby': groupby}, step=10)
-        guests = guest_obj.search(search_domain, limit=10, order=default_order_by, offset=page_detail['offset'])
-        if guest_group_by:
-            guests_group_list = [{guest_group_by: k, 'guests': guest_obj.concat(*g)} for k, g in groupbyelement(guests, itemgetter(guest_group_by))]
+        guests = reservation_obj.search(search_domain, limit=10, order=default_order_by, offset=page_detail['offset'])
+        if reservation_group_by:
+            guests_group_list = [{reservation_group_by: k, 'guests': reservation_obj.concat(*g)} for k, g in groupbyelement(guests, itemgetter(reservation_group_by))]
         else:
             guests_group_list = [{'guests': guests}]
         vals = {'group_guests': guests_group_list, 'page_name': 'guests_list_view', 'pager': page_detail, 'default_url': guest_url, 'groupby': groupby, 'searchbar_groupby': groupby_list, 'sortby': sortby, 'searchbar_sortings': sorted_list, 'search_in': search_in, 'searchbar_inputs': search_list, 'search': search}

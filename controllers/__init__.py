@@ -2,3 +2,4 @@
 
 from . import controllers
 from . import portal
+from . import xlsx_controllers

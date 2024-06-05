@@ -14,7 +14,7 @@
         </menuitem>
         <menuitem name="Guest" sequence="20" id="menu_hotel_guest_master" parent="menu_hotel_root">
             <menuitem name="Guest" sequence="0" id="menu_guest_detail_master"/>
-            <menuitem name="Feedback" sequence="10" id="menu_feedback_detail_master"/>
+            <menuitem name="Complaint" sequence="10" id="menu_complaint_detail_master"/>
         </menuitem>
         <menuitem name="Reservation" sequence="30" id="menu_hotel_reservation_master" parent="menu_hotel_root">
             <menuitem name="Reservation" sequence="0" id="menu_reservation_detail_master"/>

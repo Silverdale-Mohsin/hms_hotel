@@ -149,6 +149,23 @@
             </field>
         </record>
         <!-- MAIN ACTION -->
+        <record id="action_employee_department_kanban" model="ir.actions.act_window">
+            <field name="name">EMPLOYEEs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="view_res_users_as_employees_search_inherit"/>
+            <field name="context">{
+                "searchpanel_default_emp_department_id": [active_id],
+                "default_department_id": active_id,
+                "search_default_group_by_department_id": 1,
+                "search_default_department_id": active_id,
+                "expand": 1}
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first Employee!</p>
+            </field>
+        </record>
         <record model="ir.actions.act_window" id="action_hotel_employee">
             <field name="name">EMPLOYEEs</field>
             <field name="type">ir.actions.act_window</field>

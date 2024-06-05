@@ -12,40 +12,59 @@ if uid:
     models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
     # Search Method
-    # partners_search = models.execute_kw(db, uid, password, 'res.partner', 'search', [[]])
-    # print("Partners Search:", partners_search)
-    # partners_search = models.execute_kw(db, uid, password, 'res.partner', 'search', [[['is_company', '=', True]]])
-    # print("Partners Search:", partners_search)
-    # partners_search = models.execute_kw(db, uid, password, 'res.partner', 'search', [[]], {'offset': 10, 'limit': 5})
-    # print("Partners Search:", partners_search)
+    print("Search Method")
+    guests_search = models.execute_kw(db, uid, password, 'hotel.guest', 'search', [[]])
+    print("Guests:", guests_search)
+    # guests_search = models.execute_kw(db, uid, password, 'hotel.guest', 'search', [[['gender', '=', 'male']]])
+    # print("Male Guests:", guests_search)
+    # guests_search = models.execute_kw(db, uid, password, 'hotel.guest', 'search', [[['gender', '=', 'female']]])
+    # print("Female Guests:", guests_search)
 
     # Search-Count Method
-    # partners_search_count = models.execute_kw(db, uid, password, 'res.partner', 'search_count', [[]])
-    # print("Partners Search Count:", partners_search_count)
-    # partners_search_count = models.execute_kw(db, uid, password, 'res.partner', 'search_count', [[['is_company', '=', True]]])
-    # print("Partners Search Count:", partners_search_count)
+    print("Search-Count Method")
+    guests_search_count = models.execute_kw(db, uid, password, 'hotel.guest', 'search_count', [[]])
+    print("Guests:", guests_search_count)
+    # guests_search_count = models.execute_kw(db, uid, password, 'hotel.guest', 'search_count', [[['gender', '=', 'male']]])
+    # print("Male Guests:", guests_search_count)
+    # guests_search_count = models.execute_kw(db, uid, password, 'hotel.guest', 'search_count', [[['gender', '=', 'female']]])
+    # print("Female Guests:", guests_search_count)
 
     # Read Method
-    # partners_rec = models.execute_kw(db, uid, password, 'res.partner', 'read', [partners_search], {'fields': ['name', 'country_id', 'comment']})
-    # print("Partner Read Record:", partners_rec)
+    print("Read Method")
+    guests_record = models.execute_kw(db, uid, password, 'hotel.guest', 'read', [guests_search], {'fields': ['name', 'guest_ref', 'gender']})
+    print("Guests:", guests_record)
 
     # Search-Read Method
-    # partners_search_read = models.execute_kw(db, uid, password, 'res.partner', 'search_read', [[['is_company', '=', True]]], {'fields': ['id', 'name']})
-    # print("Partner Search-Read Record:", partners_search_read)
+    print("Search-Read Method")
+    guests_search_read = models.execute_kw(db, uid, password, 'hotel.guest', 'search_read', [[]], {'fields': ['id', 'name', 'guest_ref']})
+    print("Guests:", guests_search_read)
 
+    # Create Method
+    print("Create Method")
     # vals = {
-    #     'name': "Odoo Mates External APIs",
-    #     'email': "odoomates@hotmail.com"
+    #     "hotel_id": 3,
+    #     "name": "External APIs",
+    #     "gender": "female",
+    #     "marital_status": "single",
+    #     "email": "externalapi@gmail.com",
+    #     "phone_no": "03001234567",
+    #     "date_of_birth": "2000-10-25",
+    #     "nationality": "pakistan",
+    #     "cnic_no": "38401-1234567-8",
+    #     "emergency_contact_name": "RestApi",
+    #     "emergency_contact_number": "03339874563"
     # }
-    # created_id = models.execute_kw(db, uid, password, 'res.partner', 'create', [vals])
+    # created_id = models.execute_kw(db, uid, password, 'hotel.guest', 'create', [vals])
     # print("Created Record", created_id)
 
     # Write/Update Method
-    # id = models.execute_kw(db, uid, password, 'res.partner', 'search', [[['email', '=', 'odoomates@hotmail.com']]])
-    # models.execute_kw(db, uid, password, 'res.partner', 'write', [id, {'mobile': "03211231230"}])
-    # models.execute_kw(db, uid, password, 'res.partner', 'write', [[46], {'mobile': "03001122333"}])
+    print("Write/Update Method")
+    id = models.execute_kw(db, uid, password, 'hotel.guest', 'search', [[['name', '=', "External API"]]])
+    models.execute_kw(db, uid, password, 'hotel.guest', 'write', [id, {'name': "API Updated"}])
+    # models.execute_kw(db, uid, password, 'hotel.guest', 'write', [[46], {'mobile': "03001122333"}])
 
     # Unlink/Delete Method
-    # models.execute_kw(db, uid, password, 'res.partner', 'unlink', [[47]])
+    print("Unlink/Delete Method")
+    # models.execute_kw(db, uid, password, 'hotel.guest', 'unlink', [[11]])
 else:
     print("Authentication Failed!")

@@ -6,6 +6,9 @@
             <field name="model">hotel.payment</field>
             <field name="arch" type="xml">
                 <tree export_xlsx="0" class="text-center" sample="1" decoration-warning="state == 'draft'" decoration-success="state == 'successful'" decoration-bf="state == 'successful'">
+                    <header>
+                        <button name="%(hms_hotel.action_print_payment_report)d" type="action" string="Print Payment Report" class="oe_stat_button" icon="fa-file-excel-o"/>
+                    </header>
                     <field name="receipt_number"/>
                     <field name="hotel_id"/>
                     <field name="guest_id"/>
@@ -106,6 +109,18 @@
             </field>
         </record>
         <!-- ACTION -->
+        <record model="ir.actions.server" id="action_print_payment_report">
+            <field name="name">Print Payment Report</field>
+            <field name="model_id" ref="model_hotel_payment"/>
+            <field name="binding_model_id" ref="model_hotel_payment"/>
+            <field name="state">code</field>
+            <field name="code">action = {
+                'type': 'ir.actions.act_url',
+                'url': '/payment/report?payment_ids=%s' % (",".join(map(str, env.context.get('active_ids', [])))),
+                'target': 'self',
+                }
+            </field>
+        </record>
         <record model="ir.actions.act_window" id="action_hotel_payment">
             <field name="name">PAYMENTs</field>
             <field name="type">ir.actions.act_window</field>

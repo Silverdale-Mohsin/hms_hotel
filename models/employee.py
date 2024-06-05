@@ -62,6 +62,12 @@ class HotelDeptartment(models.Model):
     hotel_id = fields.Many2one(related="head_of_department_id.hotel_id", string='Hotel', store=True)
     created_date = fields.Date(string="Created Date", default=fields.Date.context_today)
     position_ids = fields.One2many('hotel.position', 'department_id', string='Positions')
+    employee_count = fields.Integer(string="Employee Count", compute='_compute_employee_count', store=True)
+
+    @api.depends('position_ids.employee_ids')
+    def _compute_employee_count(self):
+        for department in self:
+            department.employee_count = len(department.position_ids.mapped('employee_ids'))
 
 class HotelPosition(models.Model):
     _name = 'hotel.position'
@@ -73,3 +79,4 @@ class HotelPosition(models.Model):
     department_id = fields.Many2one('hotel.department', string='Department')
     salary_range = fields.Char(string='Salary Range')
     created_date = fields.Date(string="Created Date", default=fields.Date.context_today)
+    employee_ids = fields.One2many('res.users', 'emp_position_id', string='Employees')

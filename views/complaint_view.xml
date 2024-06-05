@@ -94,14 +94,14 @@
             </field>
         </record>
         <!-- FORM ACTION -->
-<!--        <record model="ir.actions.act_window" id="hms_hotel.action_feedback_form">-->
-<!--            <field name="name">FEEDBACKs</field>-->
-<!--            <field name="type">ir.actions.act_window</field>-->
-<!--            <field name="res_model">hotel.feedback</field>-->
-<!--            <field name="view_mode">form</field>-->
-<!--            <field name="target">new</field>-->
-<!--            <field name="context">{'default_owner_id': active_id}</field>-->
-<!--        </record>-->
+        <record model="ir.actions.act_window" id="hms_hotel.action_complaint_form">
+            <field name="name">COMPLAINTs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.complaint</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_owner_id': active_id}</field>
+        </record>
         <!-- ACTION -->
         <record model="ir.actions.act_window" id="action_hotel_complaint">
             <field name="name">COMPLAINTs</field>
@@ -115,6 +115,6 @@
             </field>
         </record>
         <!-- MENU -->
-        <menuitem name="Complaints" sequence="20" id="menu_hotel_complaint" parent="menu_feedback_detail_master" action="action_hotel_complaint"/>
+        <menuitem name="Complaints" sequence="20" id="menu_hotel_complaint" parent="menu_complaint_detail_master" action="action_hotel_complaint"/>
     </data>
 </odoo>

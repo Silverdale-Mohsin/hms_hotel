@@ -8,14 +8,17 @@
                 <kanban class="oe_background_grey o_kanban_dashboard o_hr_department_kanban o_kanban_small_column">
                     <field name="id"/>
                     <field name="name"/>
+                    <field name="employee_count"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div t-attf-class="o_kanban_card_header">
+                            <div>
                                 <div class="o_kanban_card_header_title">
-                                    <div class="o_primary">
-                                        <a type="edit">
-                                            <field name="name"/>
-                                        </a>
+                                    <div class="o_primary" style="display:flex; justify-content:space-between;">
+                                        <a type="edit"><field name="name"/></a>
+                                        <button class="btn-primary" name="%(hms_hotel.action_employee_department_kanban)d" type="action">
+                                            <t t-out="record.employee_count.raw_value"/>
+                                            Employees
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -35,6 +38,7 @@
                     <field name="description"/>
                     <field name="head_of_department_id"/>
                     <field name="created_date"/>
+                    <field name="employee_count" sum="Total"/>
                 </tree>
             </field>
         </record>

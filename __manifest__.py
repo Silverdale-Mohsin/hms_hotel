@@ -21,6 +21,7 @@
         'data/hotel.tag.csv',
         'data/sequence_data.xml',
         'data/mail_template_data.xml',
+        'data/cron.xml',
         # WIZARD
         'wizard/cancel_reservation_view.xml',
         # VIEWS

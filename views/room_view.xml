@@ -82,9 +82,10 @@
                         </group>
                         <group string="Other Information" name="other_info">
                             <group>
-                                <field name="maintenance_required"/>
+                                <field name="assigned_to" widget="selection" domain="[('emp_department_id', '=', 'Housekeeping'),('emp_position_id', '=', 'Room Attendant')]"/>
                             </group>
                             <group>
+                                <field name="maintenance_required"/>
                                 <field name="maintenance_reason" attrs="{'invisible': [('maintenance_required','!=',True)],'required': [('maintenance_required','=',True)]}"/>
                             </group>
                         </group>
