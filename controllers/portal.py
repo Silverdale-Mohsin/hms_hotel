@@ -15,9 +15,9 @@ class HotelGuestPortal(CustomerPortal):
         if not groupby:
             groupby = 'none'
         sorted_list = {
-            'id': {'label': 'ID Desc', 'order': 'id desc'},
+            'id': {'label': 'ID', 'order': 'id'},
             'name': {'label': "Name", 'order': 'name'},
-            'guest_ref': {'label': "Reference", 'order': 'guest_ref'}
+            'guest_ref': {'label': "Reference Desc", 'order': 'guest_ref desc'}
         }
         search_list = {
             'All': {'label': 'All', 'input': 'All', 'domain': []},
@@ -76,9 +76,9 @@ class HotelReservationPortal(CustomerPortal):
         if not groupby:
             groupby = 'none'
         sorted_list = {
-            'id': {'label': 'ID Desc', 'order': 'id desc'},
+            'id': {'label': 'ID', 'order': 'id'},
             'guest_id': {'label': "Guest Id", 'order': 'guest_id'},
-            'reservation_ref': {'label': "Reference", 'order': 'reservation_ref'}
+            'reservation_ref': {'label': "Reference Desc", 'order': 'reservation_ref desc'}
         }
         search_list = {
             'All': {'label': 'All', 'input': 'All', 'domain': []},
@@ -109,3 +109,52 @@ class HotelReservationPortal(CustomerPortal):
             reservations_group_list = [{'reservations': reservations}]
         vals = {'group_reservations': reservations_group_list, 'page_name': 'reservations_list_view', 'pager': page_detail, 'default_url': reservation_url, 'groupby': groupby, 'searchbar_groupby': groupby_list, 'sortby': sortby, 'searchbar_sortings': sorted_list, 'search_in': search_in, 'searchbar_inputs': search_list, 'search': search}
         return request.render("hms_hotel.hotel_reservations_list_view_portal", vals)
+
+class HotelComplaintPortal(CustomerPortal):
+    def _prepare_home_portal_values(self, counters):
+        rtn = super(HotelComplaintPortal, self)._prepare_home_portal_values(counters)
+        rtn['complaint_count'] = request.env['hotel.complaint'].search_count([])
+        return rtn
+
+    @http.route(['/my/complaints', '/my/complaints/page/<int:page>'], type='http', auth="user", website=True)
+    def HotelComplaintListView(self, page=1, sortby='id', search="", search_in="All", groupby="none", **kw):
+        if not groupby:
+            groupby = 'none'
+        sorted_list = {
+            'id': {'label': 'ID', 'order': 'id'},
+            'complaint_no': {'label': "Complaint No Desc", 'order': 'complaint_no desc'},
+            'guest_id': {'label': "Guest Id", 'order': 'guest_id'},
+            'state': {'label': "State", 'order': 'state'},
+            'priority': {'label': "Priority", 'order': 'priority'}
+        }
+        search_list = {
+            'All': {'label': 'All', 'input': 'All', 'domain': []},
+            'Complaint No': {'label': "Complaint No", 'input': 'Complaint No', 'domain': [('complaint_no', 'ilike', search)]},
+            'Guest Id': {'label': "Guest Id", 'input': 'Guest Id', 'domain': [('guest_id', 'ilike', search)]},
+            'State': {'label': "State", 'input': 'State', 'domain': [('state', 'ilike', search)]}
+        }
+        groupby_list = {
+            'none': {'input': 'none', 'label':_("None"), 'order': 1},
+            'guest_id': {'input': 'guest_id', 'label':_("Guest Id"), 'order': 1},
+            'state': {'input': 'state', 'label':_("State"), 'order': 1},
+            'priority': {'input': 'priority', 'label':_("Priority"), 'order': 1}
+        }
+        complaint_group_by = groupby_list.get(groupby, {})
+        default_order_by = sorted_list[sortby]['order']
+        if groupby in ("guest_id", "state", "priority"):
+            complaint_group_by = complaint_group_by.get("input")
+            default_order_by = complaint_group_by+","+default_order_by
+        else:
+            complaint_group_by = ''
+        search_domain = search_list[search_in]['domain']
+        complaint_obj = request.env['hotel.complaint']
+        total_complaint = complaint_obj.search_count(search_domain)
+        complaint_url = '/my/complaints'
+        page_detail = pager(url=complaint_url, total=total_complaint, page=page, url_args={'sortby': sortby, 'search_in': search_in, 'search': search, 'groupby': groupby}, step=10)
+        complaints = complaint_obj.search(search_domain, limit=10, order=default_order_by, offset=page_detail['offset'])
+        if complaint_group_by:
+            complaints_group_list = [{complaint_group_by: k, 'complaints': complaint_obj.concat(*g)} for k, g in groupbyelement(complaints, itemgetter(complaint_group_by))]
+        else:
+            complaints_group_list = [{'complaints': complaints}]
+        vals = {'group_complaints': complaints_group_list, 'page_name': 'complaints_list_view', 'pager': page_detail, 'default_url': complaint_url, 'groupby': groupby, 'searchbar_groupby': groupby_list, 'sortby': sortby, 'searchbar_sortings': sorted_list, 'search_in': search_in, 'searchbar_inputs': search_list, 'search': search}
+        return request.render("hms_hotel.hotel_complaints_list_view_portal", vals)

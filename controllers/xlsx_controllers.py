@@ -12,9 +12,9 @@ class PaymentReport(http.Controller):
         else:
             payment_records = request.env['hotel.payment'].search([])
 
-        output = BytesIO()
-        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-        worksheet = workbook.add_worksheet('Payment Report')
+        output = BytesIO() # Store the workbook in memory
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True}) # Creates workbook
+        worksheet = workbook.add_worksheet('Payment Report') # Creates worksheet in workbook
 
         header_format = workbook.add_format({'bold': True, 'bg_color': '#D7E4BC', 'border': 1, 'align': 'center'})
         data_format = workbook.add_format({'align': 'center'})
@@ -51,9 +51,9 @@ class PaymentReport(http.Controller):
         workbook.close()
 
         output.seek(0)
-        file_data = output.read()
+        file_data = output.read() # Output buffer is reset to the beginning using seek(0) to prepare for reading.
         output.close()
-
+        # The content of the output buffer is read into file_data.
         response = request.make_response(
             file_data,
             headers=[

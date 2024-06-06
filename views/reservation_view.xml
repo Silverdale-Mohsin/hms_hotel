@@ -163,6 +163,42 @@
                                 <field name="requests" attrs="{'invisible': [('special_requests','=',False)], 'required': [('special_requests','=',True)]}"/>
                             </group>
                         </group>
+                        <notebook>
+                            <page string="Services" name="services">
+                                <field name="service_ids">
+                                    <tree class="text-center">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="description"/>
+                                        <field name="cost" widget="monetary"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="service_type"/>
+                                        <field name="location"/>
+                                        <field name="contact_person"/>
+                                        <field name="duration"/>
+                                        <field name="is_available"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Facilities" name="facilities">
+                                <field name="facility_ids">
+                                    <tree class="text-center">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="description"/>
+                                        <field name="location" optional="show"/>
+                                        <field name="available_hours" optional="show"/>
+                                        <field name="contact_person" optional="show"/>
+                                        <field name="contact_number" optional="show"/>
+                                        <field name="reservation_fee" widget="monetary" optional="show" decoration-bf="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="maintenance_required" optional="hide"/>
+                                        <field name="maintenance_reason" optional="hide"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                     <!--Chatter-->
                     <div class="oe_chatter">

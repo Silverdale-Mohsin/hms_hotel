@@ -12,6 +12,11 @@
                 <t t-set="title">Reservations</t>
                 <t t-set="placeholder_count" t-value="'reservation_count'"/>
             </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="url">/my/complaints</t>
+                <t t-set="title">Complaints</t>
+                <t t-set="placeholder_count" t-value="'complaint_count'"/>
+            </t>
         </xpath>
     </template>
 
@@ -22,6 +27,7 @@
                 <a href="/my/guests">Guests</a> / <span t-out="guest.name"/>
             </li>
             <li t-if="page_name == 'reservations_list_view'" class="breadcrumb-item">Reservations</li>
+            <li t-if="page_name == 'complaints_list_view'" class="breadcrumb-item">Complaints</li>
         </xpath>
     </template>
 
@@ -192,8 +198,60 @@
                             <td class="text-center"><t t-out="reservation.check_in_date"/></td>
                             <td class="text-center"><t t-out="reservation.check_out_date"/></td>
                             <td class="text-center"><t t-out="reservation.price_subtotal"/> $</td>
-                            <td class="text-center"><t t-out="reservation.state.capitalize()"/></td>
+                            <td class="text-center" t-if="groupby != 'state'"><t t-out="reservation.state.capitalize()"/></td>
                             <td class="text-center"><t t-out="reservation.receipt_number"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="hotel_complaints_list_view_portal">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar"><t t-set="title">Complaints</t></t>
+            <t t-call="portal.portal_table">
+                <t t-foreach="group_complaints" t-as="complaints">
+                    <thead>
+                        <tr t-if="groupby in ('guest_id','state','priority')">
+                            <th class="text-center" t-if="groupby == 'guest_id'" colspan="9">
+                                <h3><em class="font-weight-normal text-muted" t-out="complaints['guest_id'].name"/>( <t t-out="len(complaints['complaints'])"/> )</h3>
+                            </th>
+                            <th class="text-center" t-if="groupby == 'state'" colspan="9">
+                                <h3><em class="font-weight-normal text-muted" t-out="complaints['state'].capitalize()"/>( <t t-out="len(complaints['complaints'])"/> )</h3>
+                            </th>
+                            <th class="text-center" t-if="groupby == 'priority'" colspan="9">
+                                <h3><em class="font-weight-normal text-muted" t-out="complaints['priority'].capitalize()"/>( <t t-out="len(complaints['complaints'])"/> )</h3>
+                            </th>
+                        </tr>
+                    <tr class="active">
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Complaint No</th>
+                        <th class="text-center" t-if="groupby != 'guest_id'">Guest</th>
+                        <th class="text-center">Reservation</th>
+                        <th class="text-center">Subject</th>
+                        <th class="text-center">Description</th>
+                        <th class="text-center" t-if="groupby != 'priority'">Priority</th>
+                        <th class="text-center">Assigned To</th>
+                        <th class="text-center" t-if="groupby != 'state'">Status</th>
+                        <th class="text-center">Date</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    <t t-foreach="complaints['complaints']" t-as="complaint">
+                        <tr>
+                            <td class="text-center"><t t-out="complaint.id"/></td>
+                            <td class="text-center"><t t-out="complaint.complaint_no"/></td>
+                            <td class="text-center" t-if="groupby != 'guest_id'"><t t-out="complaint.guest_id.name"/></td>
+                            <td class="text-center"><t t-out="complaint.reservation_id.reservation_ref"/></td>
+                            <td class="text-center"><t t-out="complaint.subject"/></td>
+                            <td class="text-center"><t t-out="complaint.description"/></td>
+                            <td class="text-center" t-if="groupby != 'priority'"><t t-out="complaint.priority.capitalize()"/></td>
+                            <td class="text-center"><t t-out="complaint.assigned_to.name"/></td>
+                            <td class="text-center" t-if="groupby != 'state'"><t t-out="complaint.state.capitalize()"/></td>
+                            <td class="text-center"><t t-out="complaint.created_date"/></td>
                         </tr>
                     </t>
                 </tbody>
