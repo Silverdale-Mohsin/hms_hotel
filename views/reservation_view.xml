@@ -95,6 +95,10 @@
                         <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,pending,confirm,cancel,expire"/>
                     </header>
                     <sheet>
+                        <field name="id" invisible="1"/>
+                        <div class="alert alert-info text-center mb-3" attrs="{'invisible': [('id', '&gt;', 0)]}" role="alert">
+                            You are making a new Reservation.
+                        </div>
                         <div style="display: flex; justify-content: space-between;">
                             <h1><field name="reservation_ref" readonly="1"/></h1>
                             <div class="oe_title">

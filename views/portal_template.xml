@@ -7,15 +7,21 @@
                 <t t-set="title">Guests</t>
                 <t t-set="placeholder_count" t-value="'guest_count'"/>
             </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="url">/my/reservations</t>
+                <t t-set="title">Reservations</t>
+                <t t-set="placeholder_count" t-value="'reservation_count'"/>
+            </t>
         </xpath>
     </template>
 
     <template id="portal_breadcrumbs" inherit_id="portal.portal_breadcrumbs">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'guests_list_view'" class="breadcrumb-item">Guests</li>
-<!--            <li t-if="page_name == 'patients_form_view'" class="breadcrumb-item">-->
-<!--                <a href="/my/patients">Patients</a> / <span t-out="patient.name"/>-->
-<!--            </li>-->
+            <li t-if="page_name == 'guests_form_view'" class="breadcrumb-item">
+                <a href="/my/guests">Guests</a> / <span t-out="guest.name"/>
+            </li>
+            <li t-if="page_name == 'reservations_list_view'" class="breadcrumb-item">Reservations</li>
         </xpath>
     </template>
 
@@ -28,11 +34,11 @@
                     <thead>
                         <tr t-if="groupby in ('gender','marital_status')">
                             <th class="text-center" t-if="groupby == 'gender'" colspan="8">
-                                <h3>Gender : <em class="font-weight-normal text-muted" t-out="guests['gender']"/>
+                                <h3><em class="font-weight-normal text-muted" t-out="guests['gender'].capitalize()"/>
                                 ( <t t-out="len(guests['guests'])"/> )</h3>
                             </th>
                             <th class="text-center" t-if="groupby == 'marital_status'" colspan="8">
-                                <h3>Marital Status : <em class="font-weight-normal text-muted" t-out="guests['marital_status']"/>
+                                <h3><em class="font-weight-normal text-muted" t-out="guests['marital_status'].capitalize()"/>
                                 ( <t t-out="len(guests['guests'])"/> )</h3>
                             </th>
                         </tr>
@@ -143,5 +149,56 @@
                 </section>
             </t>
         </xpath>
+    </template>
+
+    <template id="hotel_reservations_list_view_portal">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar"><t t-set="title">Reservations</t></t>
+            <t t-call="portal.portal_table">
+                <t t-foreach="group_reservations" t-as="reservations">
+                    <thead>
+                        <tr t-if="groupby in ('guest_id','state')">
+                            <th class="text-center" t-if="groupby == 'guest_id'" colspan="8">
+                                <h3><em class="font-weight-normal text-muted" t-out="reservations['guest_id'].name"/>
+                                ( <t t-out="len(reservations['reservations'])"/> )</h3>
+                            </th>
+                            <th class="text-center" t-if="groupby == 'state'" colspan="8">
+                                <h3><em class="font-weight-normal text-muted" t-out="reservations['state'].capitalize()"/>
+                                ( <t t-out="len(reservations['reservations'])"/> )</h3>
+                            </th>
+                        </tr>
+                    <tr class="active">
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Reference</th>
+                        <th class="text-center" t-if="groupby != 'guest_id'">Guest</th>
+                        <th class="text-center">Room</th>
+                        <th class="text-center">Duration</th>
+                        <th class="text-center">Check-In-Date</th>
+                        <th class="text-center">Check-Out-Date</th>
+                        <th class="text-center">Price(Subtotal)</th>
+                        <th class="text-center" t-if="groupby != 'state'">State</th>
+                        <th class="text-center">Receipt</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    <t t-foreach="reservations['reservations']" t-as="reservation">
+                        <tr>
+                            <td class="text-center"><t t-out="reservation.id"/></td>
+                            <td class="text-center"><t t-out="reservation.reservation_ref"/></td>
+                            <td class="text-center" t-if="groupby != 'guest_id'"><t t-out="reservation.guest_id.name"/></td>
+                            <td class="text-center"><t t-out="reservation.room_id.room_no"/></td>
+                            <td class="text-center"><t t-out="reservation.duration"/></td>
+                            <td class="text-center"><t t-out="reservation.check_in_date"/></td>
+                            <td class="text-center"><t t-out="reservation.check_out_date"/></td>
+                            <td class="text-center"><t t-out="reservation.price_subtotal"/> $</td>
+                            <td class="text-center"><t t-out="reservation.state.capitalize()"/></td>
+                            <td class="text-center"><t t-out="reservation.receipt_number"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+                </t>
+            </t>
+        </t>
     </template>
 </odoo>

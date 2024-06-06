@@ -17,7 +17,6 @@
                     <field name="currency_id" invisible="1"/>
                     <field name="payment_method"/>
                     <field name="payment_date"/>
-                    <field name="is_successful"/>
                     <field name="card_id" optional="hide"/>
                     <field name="card_number" optional="hide"/>
                     <field name="card_expiry" optional="hide"/>
@@ -63,6 +62,10 @@
                             <button type="object" class="oe_stat_button" icon="fa-credit-card-alt" name="action_view_cards">
                                 <field string="Card" name="card_count" widget="statinfo"/>
                             </button>
+                        </div>
+                        <field name="id" invisible="1"/>
+                        <div class="alert alert-info text-center mb-3" attrs="{'invisible': [('id', '&gt;', 0)]}" role="alert">
+                            You are making a new Payment.
                         </div>
                         <div>
                             <h1><field name="receipt_number" readonly="1"/></h1>

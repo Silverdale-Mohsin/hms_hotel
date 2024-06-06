@@ -108,6 +108,10 @@
                                 <field string="Reservation" name="reservation_count" widget="statinfo"/>
                             </button>
                         </div>
+                        <field name="id" invisible="1"/>
+                        <div class="alert alert-info text-center mb-3" attrs="{'invisible': [('id', '&gt;', 0)]}" role="alert">
+                            You are inviting a new Guest.
+                        </div>
                         <div class="alert alert-info text-center o_form_header" role="alert" attrs="{'invisible':[('is_birthday','=',False)]}">
                             <a class="close" data-dismiss="alert" href="#">x</a>
                             <div><strong>Birthday Today!</strong></div>

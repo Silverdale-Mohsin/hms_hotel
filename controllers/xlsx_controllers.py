@@ -16,23 +16,37 @@ class PaymentReport(http.Controller):
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
         worksheet = workbook.add_worksheet('Payment Report')
 
-        bold = workbook.add_format({'bold': True})
+        header_format = workbook.add_format({'bold': True, 'bg_color': '#D7E4BC', 'border': 1, 'align': 'center'})
+        data_format = workbook.add_format({'align': 'center'})
+
+        worksheet.set_column('A:A', 20)
+        worksheet.set_column('B:B', 15)
+        worksheet.set_column('C:C', 15)
+        worksheet.set_column('D:D', 15)
+        worksheet.set_column('E:E', 18)
+        worksheet.set_column('F:F', 15)
+        worksheet.set_column('G:G', 15)
+        worksheet.set_column('H:H', 20)
+        worksheet.set_column('I:I', 18)
+        worksheet.set_column('J:J', 15)
+        worksheet.set_column('K:K', 15)
+
         headers = ['Receipt #', 'Guest', 'Reservation', 'Amount', 'Method', 'Date', 'Card Type', 'Card #', 'Card Expiry', 'Successful', 'State']
         for col_num, header in enumerate(headers):
-            worksheet.write(0, col_num, header, bold)
+            worksheet.write(0, col_num, header, header_format)
         row = 1
         for record in payment_records:
-            worksheet.write(row, 0, record.receipt_number)
-            worksheet.write(row, 1, record.guest_id.name)
-            worksheet.write(row, 2, record.reservation_id.reservation_ref)
-            worksheet.write(row, 3, record.amount)
-            worksheet.write(row, 4, record.payment_method)
-            worksheet.write(row, 5, str(record.payment_date))
-            worksheet.write(row, 6, record.card_id.card_type)
-            worksheet.write(row, 7, record.card_number)
-            worksheet.write(row, 8, str(record.card_expiry))
-            worksheet.write(row, 9, record.is_successful)
-            worksheet.write(row, 10, record.state)
+            worksheet.write(row, 0, record.receipt_number, data_format)
+            worksheet.write(row, 1, record.guest_id.name, data_format)
+            worksheet.write(row, 2, record.reservation_id.reservation_ref, data_format)
+            worksheet.write(row, 3, f"{record.amount} $", data_format)
+            worksheet.write(row, 4, record.payment_method.replace('_', ' ').capitalize(), data_format)
+            worksheet.write(row, 5, str(record.payment_date), data_format)
+            worksheet.write(row, 6, record.card_id.card_type, data_format)
+            worksheet.write(row, 7, record.card_number, data_format)
+            worksheet.write(row, 8, str(record.card_expiry), data_format)
+            worksheet.write(row, 9, record.is_successful, data_format)
+            worksheet.write(row, 10, record.state.capitalize(), data_format)
             row += 1
         workbook.close()
 

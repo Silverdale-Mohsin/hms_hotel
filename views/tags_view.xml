@@ -5,7 +5,7 @@
             <field name="name">hotel.tag.tree</field>
             <field name="model">hotel.tag</field>
             <field name="arch" type="xml">
-                <tree default_order="sequence asc" class="text-center" export_xlsx="0" sample="1" decoration-info="type == 'tag_guest'" decoration-warning="type == 'tag_reservation'" decoration-success="type == 'tag_room'" decoration-danger="type == 'tag_employee'">
+                <tree expand="1" default_order="sequence asc" class="text-center" export_xlsx="0" sample="1" decoration-info="type == 'tag_guest'" decoration-warning="type == 'tag_reservation'" decoration-success="type == 'tag_room'" decoration-danger="type == 'tag_employee'">
                     <field name="sequence"/>
                     <field name="name" decoration-bf="1"/>
                     <field name="type"/>
@@ -39,6 +39,10 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
+                        <field name="id" invisible="1"/>
+                        <div class="alert alert-info text-center mb-3" attrs="{'invisible': [('id', '&gt;', 0)]}" role="alert">
+                            You are making a new Tag.
+                        </div>
                         <group string="Tags Information" name="tag_info">
                             <group>
                                 <field name="name"/>

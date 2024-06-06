@@ -5,11 +5,12 @@
             <field name="name">hotel.room.tree</field>
             <field name="model">hotel.room</field>
             <field name="arch" type="xml">
-                <tree default_order="room_no asc" export_xlsx="0" sample="1" multi_edit="1" class="text-center" decoration-danger="is_available == False" decoration-bf="is_available == False" decoration-success="view_type == 'garden_view'" decoration-info="view_type == 'sea_view'" decoration-warning="view_type == 'city_view'">
+                <tree expand="1" default_order="room_no asc" export_xlsx="0" sample="1" multi_edit="1" class="text-center" decoration-danger="is_available == False" decoration-bf="is_available == False" decoration-success="view_type == 'garden_view'" decoration-info="view_type == 'sea_view'" decoration-warning="view_type == 'city_view'">
                     <field name="hotel_id" decoration-bf="1"/>
                     <field name="room_no" decoration-bf="1"/>
                     <field name="type"/>
                     <field name="view_type"/>
+                    <field name="assigned_to"/>
                     <field name="floor"/>
                     <field name="capacity"/>
                     <field name="same_room_reserve" decoration-bf="1" readonly="1"/>
@@ -58,6 +59,10 @@
                         <field name="state" widget="statusbar" nolabel="1" statusbar_visible="clean,dirty,in_progress"/>
                     </header>
                     <sheet>
+                        <field name="id" invisible="1"/>
+                        <div class="alert alert-info text-center mb-3" attrs="{'invisible': [('id', '&gt;', 0)]}" role="alert">
+                            You are making a new Room.
+                        </div>
                         <div class="oe_title">
                             <h3>
                                 <label for="hotel_id" string="Hotel Name:" class="oe_edit_only"/>
@@ -126,7 +131,7 @@
             <field name="res_model">hotel.room</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
-            <field name="context">{'search_default_room_id_is_available':1}</field>
+            <field name="context">{'search_default_room_id_is_available':1, 'search_default_group_by_floor':1}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">Create your first Room!</p>
             </field>
