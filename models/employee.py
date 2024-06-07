@@ -57,6 +57,7 @@ class HotelDeptartment(models.Model):
     _description = 'Hotel Department'
 
     name = fields.Char(string="Department Name", required=True)
+    hotel_id = fields.Many2one('res.company', string='Hotel', tracking=True, required=True)
     description = fields.Text(string="Description", required=True)
     head_of_department_id = fields.Many2one('res.users', string='Head of Department', required=True)
     hotel_id = fields.Many2one(related="head_of_department_id.hotel_id", string='Hotel', store=True)
@@ -75,6 +76,7 @@ class HotelPosition(models.Model):
     _description = 'Hotel Position'
 
     name = fields.Char(string="Position Title", required=True)
+    hotel_id = fields.Many2one('res.company', string='Hotel', tracking=True, required=True)
     description = fields.Text(string="Description", required=True)
     department_id = fields.Many2one('hotel.department', string='Department', required=True)
     salary_range = fields.Char(string='Salary Range')
