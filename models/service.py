@@ -7,9 +7,9 @@ class HotelService(models.Model):
     _description = 'Hotel Service'
 
     name = fields.Char(string="Name", tracking=True, required=True)
-    sequence = fields.Integer(string="Sequence", readonly=True, store=True, tracking=True)
+    sequence = fields.Integer(string="Sequence", readonly=True, store=True, tracking=True, group_operator=False)
     description = fields.Text(string="Description", tracking=True, required=True)
-    cost = fields.Float(string="Cost", tracking=True, required=True)
+    cost = fields.Float(string="Cost", tracking=True, required=True, group_operator=False)
     is_available = fields.Boolean(string="Available", default=True, tracking=True)
     service_type = fields.Char(string="Service Type", tracking=True, required=True)
     location = fields.Char(string="Location", tracking=True, required=True)

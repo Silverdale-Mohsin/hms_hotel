@@ -7,14 +7,14 @@ class HotelFacility(models.Model):
     _description = 'Hotel Facility'
 
     name = fields.Char(string="Name", tracking=True, required=True)
-    sequence = fields.Integer(string="Sequence", readonly=True, store=True, tracking=True)
+    sequence = fields.Integer(string="Sequence", readonly=True, store=True, tracking=True, group_operator=False)
     type = fields.Char(string="Type", tracking=True, required=True)
     description = fields.Text(string="Description", tracking=True, required=True)
     location = fields.Char(string="Location", tracking=True, required=True)
     available_hours = fields.Text(string="Available Hours", tracking=True, required=True)
     contact_person = fields.Many2one('res.users', string="Contact Person", tracking=True, required=True)
     contact_number = fields.Char(string="Contact Number", related="contact_person.phone", tracking=True, required=True)
-    reservation_fee = fields.Float(string="Reservation Fee", tracking=True, required=True)
+    reservation_fee = fields.Float(string="Reservation Fee", tracking=True, required=True, group_operator=False)
     maintenance_required = fields.Boolean(string="Maintenance Required", tracking=True)
     maintenance_reason = fields.Text(string="Reason", tracking=True)
     currency_id = fields.Many2one('res.currency', related="hotel_id.currency_id")

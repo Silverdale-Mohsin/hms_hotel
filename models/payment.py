@@ -13,7 +13,7 @@ class HotelPayment(models.Model):
     guest_id = fields.Many2one('hotel.guest', string="Guest", tracking=True, required=True)
     reservation_id = fields.Many2one('hotel.reservation', string="Reservation", tracking=True, required=True)
     card_id = fields.Many2one('hotel.guest.card', string="Card Type", tracking=True)
-    card_count = fields.Integer(related='guest_id.card_count', string="Card", tracking=True)
+    card_count = fields.Integer(related='guest_id.card_count', string="Card", tracking=True, group_operator=False)
     card_number = fields.Char(string="Card Number", tracking=True)
     card_expiry = fields.Date(string="Card Expiry", tracking=True)
     amount = fields.Monetary(related="reservation_id.price_subtotal", string="Amount", tracking=True)

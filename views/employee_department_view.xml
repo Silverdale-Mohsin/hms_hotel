@@ -38,7 +38,7 @@
                     <field name="description"/>
                     <field name="head_of_department_id"/>
                     <field name="created_date"/>
-                    <field name="employee_count" sum="Total"/>
+                    <field name="employee_count"/>
                 </tree>
             </field>
         </record>

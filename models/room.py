@@ -9,9 +9,9 @@ class HotelRoom(models.Model):
 
     room_no = fields.Char(string="Room Number", tracking=True, required=True)
     type = fields.Selection([('single', 'Single'), ('double', 'Double'), ('suite', 'Suite')], string="Type", tracking=True, required=True)
-    price_per_day = fields.Float(string="Price (Per Day)", tracking=True, required=True)
-    capacity = fields.Integer(string="Capacity", tracking=True, required=True)
-    floor = fields.Integer(string="Floor", tracking=True, required=True)
+    price_per_day = fields.Float(string="Price (Per Day)", tracking=True, required=True, group_operator=False)
+    capacity = fields.Integer(string="Capacity", tracking=True, required=True, group_operator=False)
+    floor = fields.Integer(string="Floor", tracking=True, required=True, group_operator=False)
     view_type = fields.Selection([('sea_view', 'Sea View'), ('city_view', 'City View'), ('garden_view', 'Garden View')], string="View Type", tracking=True, required=True)
     is_smoking_allowed = fields.Boolean(string="Smoking Allowed", tracking=True)
     is_available = fields.Boolean(string="Available", default=True, tracking=True)
@@ -22,7 +22,7 @@ class HotelRoom(models.Model):
     reservation_ids = fields.One2many('hotel.reservation', 'room_id', string="Reservations")
     tag_ids = fields.Many2many('hotel.tag', string="Tags", tracking=True)
     hotel_id = fields.Many2one('res.company', string='Hotels', required=True, tracking=True)
-    same_room_reserve = fields.Integer(string='Room Reserve Count', default=0, tracking=True)
+    same_room_reserve = fields.Integer(string='Room Reserve Count', default=0, tracking=True, group_operator=False)
     assigned_to = fields.Many2one('res.users', string='Assigned To', required=True)
 
     def _update_room_state(self):

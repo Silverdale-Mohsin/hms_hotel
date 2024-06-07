@@ -6,11 +6,11 @@ class HotelTags(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Hotel Tags'
 
-    sequence = fields.Integer(string="Sequence", readonly=True, store=True, tracking=True)
+    sequence = fields.Integer(string="Sequence", readonly=True, store=True, tracking=True, group_operator=False)
     name = fields.Char(string="Name", required=True, tracking=True)
     active = fields.Boolean(string='Active', default=True, tracking=True)
     type = fields.Selection([('tag_guest','Guest'),('tag_reservation','Reservation'),('tag_room','Room'),('tag_employee','Employee')], string="Type", required=True, tracking=True)
-    color = fields.Integer(string="Color", required=True, tracking=True)
+    color = fields.Integer(string="Color", required=True, tracking=True, group_operator=False)
 
     @api.model
     def create(self, vals):

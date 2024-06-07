@@ -24,14 +24,14 @@ class HotelReservation(models.Model):
     room_id = fields.Many2one('hotel.room', string="Room", tracking=True)
     room_type = fields.Selection([('single', 'Single'), ('double', 'Double'), ('suite', 'Suite')], string="Room Type", tracking=True)
     room_view_type = fields.Selection([('sea_view', 'Sea View'), ('city_view', 'City View'), ('garden_view', 'Garden View')], string="View Type", tracking=True)
-    price_per_day = fields.Float(related='room_id.price_per_day', store=True, tracking=True)
+    price_per_day = fields.Float(related='room_id.price_per_day', store=True, tracking=True, group_operator=False)
     capacity = fields.Integer(related='room_id.capacity', tracking=True)
     # SERVICE
     service_ids = fields.Many2many('hotel.service', string="Services", tracking=True)
-    service_total_price = fields.Float(string="Price (Services)", compute='_compute_totals', store=True, tracking=True)
+    service_total_price = fields.Float(string="Price (Services)", compute='_compute_totals', store=True, tracking=True, group_operator=False)
     # SERVICE
     facility_ids = fields.Many2many('hotel.facility', string="Facilities", tracking=True)
-    facility_total_price = fields.Float(string="Reservation Fee", compute='_compute_totals', store=True, tracking=True)
+    facility_total_price = fields.Float(string="Reservation Fee", compute='_compute_totals', store=True, tracking=True, group_operator=False)
     # TAG
     tag_ids = fields.Many2many('hotel.tag', string="Tags", tracking=True)
     # PAYMENT
@@ -42,8 +42,8 @@ class HotelReservation(models.Model):
     check_in_date = fields.Date(string='Check in Date', default=fields.Date.context_today, tracking=True)
     check_out_date = fields.Date(string='Check out Date', default=fields.Date.context_today, tracking=True)
     state = fields.Selection([('draft','Draft'),('pending','Pending'),('confirm','Confirmed'),('cancel','Cancelled'),('expire','Expired')], default="draft", string="Status", required=True, tracking=True)
-    progress = fields.Integer(string="Progress", compute='_compute_progress')
-    duration = fields.Integer(string="Duration (Days)", compute='_compute_duration', tracking=True)
+    progress = fields.Integer(string="Progress", compute='_compute_progress', group_operator=False)
+    duration = fields.Integer(string="Duration (Days)", compute='_compute_duration', tracking=True, group_operator=False)
     special_requests = fields.Boolean(string="Special Requests", tracking=True)
     requests = fields.Text(string="Requests", tracking=True)
     currency_id = fields.Many2one('res.currency', related="guest_id.currency_id")

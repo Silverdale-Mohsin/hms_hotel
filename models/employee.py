@@ -16,7 +16,7 @@ class HotelEmployee(models.Model):
     emergency_contact_number = fields.Char(string="Phone Number", tracking=True, required=True)
     date_of_birth = fields.Date(string="Date of Birth", tracking=True, required=True)
     registration_date = fields.Date(string="Registration Date", default=fields.Date.context_today)
-    age = fields.Integer(string="Age", compute='_compute_age', store=True, tracking=True)
+    age = fields.Integer(string="Age", compute='_compute_age', store=True, tracking=True, group_operator=False)
     is_birthday = fields.Boolean(string="Birthday ?", compute='_compute_is_birthday')
     cnic_no = fields.Char(string="CNIC Number", tracking=True, required=True)
     tag_ids = fields.Many2many('hotel.tag', string="Tags", tracking=True)
@@ -62,7 +62,7 @@ class HotelDeptartment(models.Model):
     hotel_id = fields.Many2one(related="head_of_department_id.hotel_id", string='Hotel', store=True)
     created_date = fields.Date(string="Created Date", default=fields.Date.context_today)
     position_ids = fields.One2many('hotel.position', 'department_id', string='Positions')
-    employee_count = fields.Integer(string="Employee Count", compute='_compute_employee_count', store=True)
+    employee_count = fields.Integer(string="Employee Count", compute='_compute_employee_count', store=True, group_operator=False)
 
     @api.depends('position_ids.employee_ids')
     def _compute_employee_count(self):
