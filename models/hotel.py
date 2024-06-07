@@ -21,7 +21,6 @@ class Hotel(models.Model):
 
     @api.model
     def create(self, vals):
-        vals['guest_ref'] = self.env['ir.sequence'].next_by_code('hotel.guest')
         self._validate_email(vals.get('email'))
         self._validate_phone_number(vals.get('phone'))
         return super(Hotel, self).create(vals)
