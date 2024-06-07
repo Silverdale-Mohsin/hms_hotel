@@ -55,6 +55,7 @@
                         <filter string="Department" name="group_by_department_id" context="{'group_by':'emp_department_id'}"/>
                     </group>
                     <searchpanel>
+                        <field name="hotel_id" icon="fa-user-o" select="multi" enable_counters="1"/>
                         <field name="role" icon="fa-user-o" select="multi" enable_counters="1"/>
                         <field name="emp_department_id" icon="fa-user-o" select="multi" enable_counters="1"/>
                     </searchpanel>
