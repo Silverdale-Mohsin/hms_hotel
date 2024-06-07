@@ -145,6 +145,36 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <t t-call="portal.portal_table">
+                                <thead>
+                                    <tr class="active">
+                                        <th class="text-center">Reference</th>
+                                        <th class="text-center">Room</th>
+                                        <th class="text-center">Duration</th>
+                                        <th class="text-center">Check-In-Date</th>
+                                        <th class="text-center">Check-Out-Date</th>
+                                        <th class="text-center">Price(Subtotal)</th>
+                                        <th class="text-center">State</th>
+                                        <th class="text-center">Receipt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="reservations" t-as="res">
+                                        <tr>
+                                            <td class="text-center"><t t-out="res.reservation_ref"/></td>
+                                            <td class="text-center"><t t-out="res.room_id.room_no"/></td>
+                                            <td class="text-center"><t t-out="res.duration"/></td>
+                                            <td class="text-center"><t t-out="res.check_in_date"/></td>
+                                            <td class="text-center"><t t-out="res.check_out_date"/></td>
+                                            <td class="text-center"><t t-out="res.price_subtotal"/> $</td>
+                                            <td class="text-center"><t t-out="res.state.capitalize()"/></td>
+                                            <td class="text-center"><t t-out="res.receipt_number"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </t>
+                        </div>
                     </div>
                     <div class="container py-5">
                         <h1>Chatter Feature</h1>

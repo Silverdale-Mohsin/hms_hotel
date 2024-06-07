@@ -59,6 +59,10 @@ class HotelGuestPortal(CustomerPortal):
             vals['prev_record'] = '/my/guest/{}'.format(guest_ids[guest_index - 1])
         if guest_index < len(guest_ids) - 1 and guest_ids[guest_index + 1]:
             vals['next_record'] = '/my/guest/{}'.format(guest_ids[guest_index + 1])
+
+        # Fetch reservations associated with the guest
+        reservations = request.env['hotel.reservation'].search([('guest_id', '=', guest_id.id)])
+        vals['reservations'] = reservations
         return request.render("hms_hotel.hotel_guests_form_view_portal", vals)
 
     @http.route(['/my/guest/print/<model("hotel.guest"):guest_id>'], type='http', auth="user", website=True)

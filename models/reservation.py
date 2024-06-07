@@ -52,7 +52,7 @@ class HotelReservation(models.Model):
     @api.model
     def create(self, vals):
         vals['reservation_ref'] = self.env['ir.sequence'].next_by_code('hotel.reservation')
-        self._check_in_date_and_set_state(vals)
+        # self._check_in_date_and_set_state(vals)
         res = super(HotelReservation, self).create(vals)
         self._handle_pending_state_create(res)
         return res
@@ -60,7 +60,7 @@ class HotelReservation(models.Model):
     def write(self, vals):
         for rec in self:
             self._handle_state_transition_and_room_change(rec, vals)
-            self._check_in_date_and_set_state(vals)
+            # self._check_in_date_and_set_state(vals)
             self._handle_state_cancel_or_expire(rec, vals)
         return super(HotelReservation, self).write(vals)
 
@@ -70,11 +70,11 @@ class HotelReservation(models.Model):
             self._make_room_available_if_needed(rec)
         return super(HotelReservation, self).unlink()
 
-    def _check_in_date_and_set_state(self, vals):
-        if 'check_in_date' in vals:
-            check_in_date = fields.Date.from_string(vals['check_in_date'])
-            if check_in_date and check_in_date < fields.Date.today():
-                vals['state'] = 'expire'
+    # def _check_in_date_and_set_state(self, vals):
+    #     if 'check_in_date' in vals:
+    #         check_in_date = fields.Date.from_string(vals['check_in_date'])
+    #         if check_in_date and check_in_date < fields.Date.today():
+    #             vals['state'] = 'expire'
     def _handle_pending_state_create(self, reservation):
         if reservation.state == 'pending' and reservation.room_id:
             reservation.room_id.same_room_reserve += 1
@@ -83,6 +83,8 @@ class HotelReservation(models.Model):
         if 'state' in vals:
             if reservation.state == 'pending' and vals['state'] != 'pending' and reservation.room_id and reservation.room_id.is_available:
                 reservation.room_id.same_room_reserve -= 1
+                if reservation.room_id.same_room_reserve < 0:
+                    reservation.room_id.same_room_reserve = 0
             elif reservation.state != 'pending' and vals['state'] == 'pending' and reservation.room_id and reservation.room_id.is_available:
                 reservation.room_id.same_room_reserve += 1
                 self._send_same_room_notification(reservation)
@@ -91,12 +93,12 @@ class HotelReservation(models.Model):
         if 'room_id' in vals and vals['room_id'] != reservation.room_id.id and reservation.state == 'pending':
             if reservation.room_id and reservation.room_id.is_available:
                 reservation.room_id.same_room_reserve -= 1
+                if reservation.room_id.same_room_reserve < 0:
+                    reservation.room_id.same_room_reserve = 0
             new_room = self.env['hotel.room'].browse(vals['room_id'])
             if new_room.is_available:
                 new_room.same_room_reserve += 1
                 self._send_same_room_notification(reservation, new_room)
-            # new_room.same_room_reserve += 1
-            # self._send_same_room_notification(reservation, new_room)
     def _handle_state_cancel_or_expire(self, reservation, vals):
         if 'state' in vals and vals['state'] in ['cancel', 'expire']:
             if reservation.room_id:

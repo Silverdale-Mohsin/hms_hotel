@@ -33,6 +33,9 @@ class HotelRoom(models.Model):
                 if reservation.room_id.state == 'clean':
                     reservation.room_id.action_dirty()
                     self._room_needs_cleaning()
+        reservations = self.env['hotel.reservation'].search([('state', 'in', ['draft', 'pending']), ('check_in_date', '<', fields.Date.today())])
+        for reservation in reservations:
+            reservation.state = 'expire'
 
     def _room_needs_cleaning(self):
         template = self.env.ref('hms_hotel.room_needs_cleaning_mail_template')
